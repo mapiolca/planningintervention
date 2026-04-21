@@ -30,10 +30,6 @@ if (!$user->rights->planningintervention->read && !$user->rights->planninginterv
     accessforbidden();
 }
 
-$nativeAgendaUrl = DOL_URL_ROOT.'/comm/action/index.php';
-header('Location: '.$nativeAgendaUrl);
-exit;
-
 print '<link rel="stylesheet" href="'.DOL_URL_ROOT.'/custom/planningintervention/css/planning.css">';
 
 //  customers
