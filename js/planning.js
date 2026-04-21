@@ -75,10 +75,10 @@ document.addEventListener('DOMContentLoaded', function () {
 				displayEventTime: false
 			},
 			timeGridWeek: {
-				allDaySlot: false
+				allDaySlot: true
 			},
 			timeGridDay: {
-				allDaySlot: false
+				allDaySlot: true
 			}
 		},
 		eventResizableFromStart: false,

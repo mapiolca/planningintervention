@@ -84,18 +84,35 @@ $colorMap = [
 
 while ($obj = $db->fetch_object($resqlParents)) {
 
-    $color = $colorMap[$obj->status] ?? '#3788d8';
+	$color = $colorMap[$obj->status] ?? '#3788d8';
+	$datePrevue = (string) $obj->date_prevue;
+	$dateOnly = substr($datePrevue, 0, 10);
+	$timePart = strlen($datePrevue) >= 19 ? substr($datePrevue, 11, 8) : '';
+	$hasPlannedTime = (!empty($timePart) && $timePart !== '00:00:00');
 
-    $events[] = [
-        'id'     => 'parent_'.$obj->rowid,
-        'title'  => $obj->ref,
-        'start'  => substr($obj->date_prevue, 0, 10),
-        'end'    => date('Y-m-d', strtotime('+1 day', strtotime(substr($obj->date_prevue, 0, 10)))),
-        'allDay' => true,
-        'color'  => $color,
-        'extendedProps' => ['type' => 'parent', 'ref' => $obj->ref],
-    ];
-    
+	if ($hasPlannedTime) {
+		$startTimestamp = strtotime(substr($datePrevue, 0, 19));
+		$endTimestamp = $startTimestamp ? ($startTimestamp + 3600) : false;
+
+		$eventStart = $startTimestamp ? date('Y-m-d\TH:i:s', $startTimestamp) : str_replace(' ', 'T', substr($datePrevue, 0, 19));
+		$eventEnd = $endTimestamp ? date('Y-m-d\TH:i:s', $endTimestamp) : date('Y-m-d\TH:i:s', strtotime('+1 hour', strtotime(substr($datePrevue, 0, 19))));
+		$eventAllDay = false;
+	} else {
+		$eventStart = $dateOnly;
+		$eventEnd = date('Y-m-d', strtotime('+1 day', strtotime($dateOnly)));
+		$eventAllDay = true;
+	}
+
+	$events[] = [
+		'id'     => 'parent_'.$obj->rowid,
+		'title'  => $obj->ref,
+		'start'  => $eventStart,
+		'end'    => $eventEnd,
+		'allDay' => $eventAllDay,
+		'color'  => $color,
+		'extendedProps' => ['type' => 'parent', 'ref' => $obj->ref],
+	];
+
 }
 
 // while ($obj = $db->fetch_object($resql)) {
