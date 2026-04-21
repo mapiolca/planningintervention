@@ -584,7 +584,6 @@ class modPlanningIntervention extends DolibarrModules
 		if ($resqlColumn && $db->num_rows($resqlColumn) > 0) {
 			$columnExists = true;
 		}
-//addExtraField($attrname, $label, $type, $pos, $size, $elementtype, $unique = 0, $required = 0, $default_value = '', $param = '', $alwayseditable = 0, $perms = '', $list = '-1', $help = '', $computed = '', $entity = '', $langfile = '', $enabled = '1', $totalizable = 0, $printable = 0, $moreparams = array(), $aiprompt = "", $emptyonclone = 0, $showintooltip = 0)
 		if ($resql && $db->num_rows($resql) == 0 && !$columnExists) {
 				$result = $extra->addExtraField(
 					$ignoreHoursFieldName, //$attrname
@@ -604,7 +603,7 @@ class modPlanningIntervention extends DolibarrModules
 					'', //$computed
 					'0', //$entity
 					'planningintervention@planningintervention', //$langfile
-					'isModEnabled("planningintervention")', //$enabled
+					'', //$enabled
 					0, //$totalizable
 					0, //$printable
 					array(), //$moreparams
