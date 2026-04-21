@@ -570,7 +570,13 @@ class modPlanningIntervention extends DolibarrModules
 		$ignoreHoursFieldName = 'ignore_opening_hours';
 		$ignoreHoursFieldLabel = 'Ignorer les horaires d\'ouvertures';
 		$ignoreHoursFieldHelp = 'PLANNINGINTERVENTION_IGNORE_OPENING_HOURS_HELP';
-		$ignoreHoursOptions = '1:PLANNINGINTERVENTION_IGNORE_OPENING_HOURS_1,2:PLANNINGINTERVENTION_IGNORE_OPENING_HOURS_2,3:PLANNINGINTERVENTION_IGNORE_OPENING_HOURS_3';
+		$ignoreHoursOptions = array(
+			'options' => array(
+				'1' => 'PLANNINGINTERVENTION_IGNORE_OPENING_HOURS_1',
+				'2' => 'PLANNINGINTERVENTION_IGNORE_OPENING_HOURS_2',
+				'3' => 'PLANNINGINTERVENTION_IGNORE_OPENING_HOURS_3',
+			),
+		);
 
 		$resql = $db->query("SELECT rowid FROM ".MAIN_DB_PREFIX."extrafields WHERE elementtype='".$db->escape($elementType)."' AND name='".$db->escape($ignoreHoursFieldName)."'");
 		if ($resql && $db->num_rows($resql) == 0) {
@@ -583,7 +589,7 @@ class modPlanningIntervention extends DolibarrModules
 					$elementType,
 					0,
 					0,
-					'1',
+					'',
 					$ignoreHoursOptions,
 					1,
 					'',
@@ -598,8 +604,8 @@ class modPlanningIntervention extends DolibarrModules
 			$db->query("UPDATE ".MAIN_DB_PREFIX."extrafields
 				SET label = '".$db->escape($ignoreHoursFieldLabel)."',
 					help = '".$db->escape($ignoreHoursFieldHelp)."',
-					value = '1',
-					param = '".$db->escape($ignoreHoursOptions)."',
+					value = '',
+					param = '".$db->escape(json_encode($ignoreHoursOptions))."',
 					enabled = 1
 				WHERE elementtype = '".$db->escape($elementType)."'
 				AND name = '".$db->escape($ignoreHoursFieldName)."'");
