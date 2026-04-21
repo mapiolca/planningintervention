@@ -518,14 +518,14 @@ class modPlanningIntervention extends DolibarrModules
 		$plannedDateFields = array(
 			array(
 				'name' => 'date_prevue',
-				'label' => 'Date de début prévue',
-				'help' => 'Date de début prévue de l\'intervention',
+				'label' => 'PlannedStartDate',
+				'help' => 'PlannedStartDateHelp',
 				'position' => 100,
 			),
 			array(
 				'name' => 'date_fin_prevue',
-				'label' => 'Date de fin prévue',
-				'help' => 'Date de fin prévue de l\'intervention',
+				'label' => 'PlannedEndDate',
+				'help' => 'PlannedEndDateHelp',
 				'position' => 110,
 			),
 		);
@@ -562,6 +562,7 @@ class modPlanningIntervention extends DolibarrModules
 			$db->query("UPDATE ".MAIN_DB_PREFIX."extrafields
 				SET label = '".$db->escape($fieldMeta['label'])."',
 					help = '".$db->escape($fieldMeta['help'])."',
+					langfile = 'planningintervention@planningintervention',
 					enabled = 1
 				WHERE elementtype = '".$db->escape($elementType)."'
 				AND name = '".$db->escape($fieldName)."'");
@@ -617,6 +618,7 @@ class modPlanningIntervention extends DolibarrModules
 					help = '".$db->escape($ignoreHoursFieldHelp)."',
 					value = '',
 					param = '".$db->escape(json_encode($ignoreHoursOptions))."',
+					langfile = 'planningintervention@planningintervention',
 					enabled = 1
 				WHERE elementtype = '".$db->escape($elementType)."'
 				AND name = '".$db->escape($ignoreHoursFieldName)."'");
