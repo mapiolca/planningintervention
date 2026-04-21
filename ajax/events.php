@@ -191,9 +191,9 @@ while ($obj = $db->fetch_object($resqlParents)) {
 		$hasPlannedEnd = !empty($dateFinPrevue) && $dateFinPrevue !== '0000-00-00 00:00:00';
 		$openingHoursMode = trim((string) $obj->ignore_opening_hours);
 		$openingHoursModeUpper = strtoupper($openingHoursMode);
-		$ignoreOpeningHours = ($openingHoursModeUpper === 'IGNORE' || stripos($openingHoursMode, 'Ignorer les heures') !== false);
-		$allowStartBeforeWork = ($openingHoursModeUpper === 'START_BEFORE' || stripos($openingHoursMode, 'Débuter avant') !== false || stripos($openingHoursMode, 'Debuter avant') !== false);
-		$allowEndAfterWork = ($openingHoursModeUpper === 'END_AFTER' || stripos($openingHoursMode, 'Terminer après') !== false || stripos($openingHoursMode, 'Terminer apres') !== false);
+		$ignoreOpeningHours = ($openingHoursModeUpper === 'IGNORE' || $openingHoursMode === '1' || stripos($openingHoursMode, 'Ignorer les heures') !== false);
+		$allowStartBeforeWork = ($openingHoursModeUpper === 'START_BEFORE' || $openingHoursMode === '2' || stripos($openingHoursMode, 'Débuter avant') !== false || stripos($openingHoursMode, 'Debuter avant') !== false);
+		$allowEndAfterWork = ($openingHoursModeUpper === 'END_AFTER' || $openingHoursMode === '3' || stripos($openingHoursMode, 'Terminer après') !== false || stripos($openingHoursMode, 'Terminer apres') !== false);
 
 		if ($hasPlannedTime) {
 		$startTimestamp = strtotime(substr($datePrevue, 0, 19));
