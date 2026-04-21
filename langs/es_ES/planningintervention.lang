@@ -12,3 +12,7 @@ PLANNINGINTERVENTION_WORKTIME_THU = Horarios del jueves (ejemplo: 8-12, 14-17)
 PLANNINGINTERVENTION_WORKTIME_FRI = Horarios del viernes (ejemplo: 8-12, 14-17)
 PLANNINGINTERVENTION_WORKTIME_SAT = Horarios del sábado (ejemplo: 8-12, 14-17)
 PLANNINGINTERVENTION_WORKTIME_SUN = Horarios del domingo (ejemplo: 8-12, 14-17)
+PLANNINGINTERVENTION_IGNORE_OPENING_HOURS_HELP = Ignorar horas de apertura = intervención continua. Empezar antes del inicio = permite mostrar antes de apertura. Terminar después del cierre = permite mostrar después del cierre.
+PLANNINGINTERVENTION_IGNORE_OPENING_HOURS_1 = Ignorar horas de apertura
+PLANNINGINTERVENTION_IGNORE_OPENING_HOURS_2 = Empezar antes del inicio
+PLANNINGINTERVENTION_IGNORE_OPENING_HOURS_3 = Terminar después del cierre
