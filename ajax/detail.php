@@ -11,9 +11,25 @@ if (file_exists('../../../main.inc.php')) {
 
 $langs->load("sendings");
 
-$id   = (int) GETPOST('id', 'int');
-$parentid = (int) GETPOST('parentId', 'int');
+$idraw = (string) GETPOST('id', 'restricthtml');
+$parentidraw = (string) GETPOST('parentId', 'restricthtml');
 $type = GETPOST('type', 'alpha');
+
+if (preg_match('/(?:row_|parent_)?([0-9]+)/', $idraw, $matchesid)) {
+	$id = (int) $matchesid[1];
+} else {
+	$id = 0;
+}
+
+if (preg_match('/(?:row_|parent_)?([0-9]+)/', $parentidraw, $matchesparentid)) {
+	$parentid = (int) $matchesparentid[1];
+} else {
+	$parentid = 0;
+}
+
+if (empty($parentid)) {
+	$parentid = $id;
+}
 
 require_once DOL_DOCUMENT_ROOT.'/fichinter/class/fichinter.class.php';
 require_once DOL_DOCUMENT_ROOT.'/core/class/html.formfile.class.php';
@@ -107,12 +123,13 @@ if ($resInter > 0 ) {
     print '<p style="margin:6px 0;"><strong>Contacts :</strong><br>';
 
     while ($obj = $db->fetch_object($resql)) {
-        if (!empty($obj->contact_id)) {
-            $name = trim($obj->contact_firstname.' '.$obj->contact_lastname);
-            $mail = $obj->contact_email;
-        } else {
+        $contactSource = strtolower((string) $obj->source);
+        if ($contactSource === 'internal') {
             $name = trim($obj->user_firstname.' '.$obj->user_lastname);
             $mail = $obj->user_email;
+        } else {
+            $name = trim($obj->contact_firstname.' '.$obj->contact_lastname);
+            $mail = $obj->contact_email;
         }
 
         $type = dol_escape_htmltag($obj->libelle);
@@ -131,7 +148,7 @@ if ($resInter > 0 ) {
     $object_file_path = $filedir . '/' . $filename . '.pdf';
 
     print '<br><div style="display:flex; gap:8px; margin-top:8px;">';
-    print '<a style="font-size:12px; padding:4px 10px; background:#f1f5f9; border:1px solid #e2e8f0; border-radius:6px; text-decoration:none; color:#475569;" href="'.DOL_URL_ROOT.'/fichinter/card.php?id='.$id.'" target="_blank">📋 '.$langs->trans('INTERVENTION_CARD_TITLE').'</a>';
+    print '<a style="font-size:12px; padding:4px 10px; background:#f1f5f9; border:1px solid #e2e8f0; border-radius:6px; text-decoration:none; color:#475569;" href="'.DOL_URL_ROOT.'/fichinter/card.php?id='.$parentid.'" target="_blank">📋 '.$langs->trans('INTERVENTION_CARD_TITLE').'</a>';
     
     if (file_exists($object_file_path)) {
         print '<a style="font-size:12px; padding:4px 10px; background:#fee2e2; border:1px solid #fecaca; border-radius:6px; text-decoration:none; color:#dc2626;" href="'.$pdfUrl.'" mime="application/pdf" target="_blank">📄 PDF</a>';
