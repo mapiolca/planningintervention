@@ -13,9 +13,6 @@ document.addEventListener('DOMContentLoaded', function () {
 	let workTimesByDay = {};
 
 	const isMobileView = window.matchMedia('(max-width: 767px)').matches;
-	const hasTimeGridPlugin = !!(window.FullCalendar && window.FullCalendar.timeGridPlugin);
-	const weekViewName = hasTimeGridPlugin ? 'timeGridWeek' : 'dayGridWeek';
-	const dayViewName = hasTimeGridPlugin ? 'timeGridDay' : 'dayGridDay';
 
 	function ensureListColumnsHeader() {
 		const table = calendarEl.querySelector('.fc-list-table');
@@ -171,10 +168,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
 	var calendarEl = document.getElementById('calendar');
 	const currentDolScreenWidth = (typeof dol_screenwidth !== 'undefined') ? parseInt(dol_screenwidth, 10) : window.innerWidth;
-	const toolbarRight = (currentDolScreenWidth < 500) ? (dayViewName + ',listWeek') : ('dayGridMonth,' + weekViewName + ',' + dayViewName + ',listWeek');
+	const toolbarRight = (currentDolScreenWidth < 500) ? 'timeGridDay,listWeek' : 'dayGridMonth,timeGridWeek,timeGridDay,listWeek';
 
 	var calendar = new FullCalendar.Calendar(calendarEl, {
-		initialView: isMobileView ? dayViewName : 'dayGridMonth',
+		initialView: isMobileView ? 'timeGridDay' : 'dayGridMonth',
+		plugins: [FullCalendar.interactionPlugin, FullCalendar.dayGridPlugin, FullCalendar.timeGridPlugin, FullCalendar.listPlugin],
 		firstDay: 1,
 		displayEventTime: true,
 		height: 'auto',
@@ -219,12 +217,6 @@ document.addEventListener('DOMContentLoaded', function () {
 			timeGridDay: {
 				allDaySlot: true,
 				slotEventOverlap: false
-			},
-			dayGridWeek: {
-				displayEventTime: false
-			},
-			dayGridDay: {
-				displayEventTime: false
 			}
 		},
 		eventResizableFromStart: false,
