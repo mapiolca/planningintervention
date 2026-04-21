@@ -108,15 +108,22 @@ $sqlParents = "SELECT parent.rowid, parent.ref, parent.description, parent.fk_st
 
 // ── Statuts ──
 $statusToInclude = [];
+$plannedStatuses = array(0, 1);
+$treatedStatuses = array(2, 3);
 if ($statusStr !== '' && $statusStr !== null) {
     foreach (explode(',', $statusStr) as $p) {
         if (is_numeric($p)) $statusToInclude[] = intval($p);
     }
 } else {
-    $statusToInclude = [0, 1];
+    $statusToInclude = $plannedStatuses;
 }
-if ($showTreated && !in_array(3, $statusToInclude)) {
-    $statusToInclude[] = 3;
+if ($showTreated) {
+	$statusToInclude = array_unique(array_merge($statusToInclude, $plannedStatuses, $treatedStatuses));
+} else {
+	$statusToInclude = array_values(array_diff($statusToInclude, $treatedStatuses));
+	if (empty($statusToInclude)) {
+		$statusToInclude = $plannedStatuses;
+	}
 }
 $sqlRows .= " AND parent.fk_statut IN (".implode(',', $statusToInclude).")";
 $sqlParents .= " AND parent.fk_statut IN (".implode(',', $statusToInclude).")";
@@ -177,6 +184,7 @@ $color = '#3788d8';
 $colorMap = [
     0 => getDolGlobalString('PLANNINGINTERVENTION_COLOR_DRAFT', '#8b8b8b'),
     1 => getDolGlobalString('PLANNINGINTERVENTION_COLOR_VALIDATED', '#27ae60'),
+    2 => getDolGlobalString('PLANNINGINTERVENTION_COLOR_FINISHED', '#2287e6'),
     3 => getDolGlobalString('PLANNINGINTERVENTION_COLOR_FINISHED', '#2287e6'),
     ];
 

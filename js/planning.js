@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	let hideNonWorkingHours = false;
 	let overrunDurationMinutes = 0;
 	let workTimesByDay = {};
+	let monthViewRenderedKeys = new Set();
 
 	const isMobileView = window.matchMedia('(max-width: 767px)').matches;
 
@@ -19,31 +20,34 @@ document.addEventListener('DOMContentLoaded', function () {
 		if (!table) return;
 
 		const headerRow = table.querySelector('thead tr');
-		if (!headerRow || headerRow.dataset.piColumnsReady === '1') return;
+		if (!headerRow) return;
 
-		const titleHeader = headerRow.querySelector('.fc-list-event-title');
-		if (titleHeader) {
-			titleHeader.textContent = LANGS.intervention;
+		if (headerRow.dataset.piColumnsReady !== '1') {
+			const titleHeader = headerRow.querySelector('.fc-list-event-title');
+			if (titleHeader) {
+				titleHeader.textContent = LANGS.intervention;
+			}
+
+			const thirdPartyHeader = document.createElement('th');
+			thirdPartyHeader.className = 'fc-list-event-thirdparty';
+			thirdPartyHeader.textContent = LANGS.listThirdParty;
+			headerRow.appendChild(thirdPartyHeader);
+
+			const descriptionHeader = document.createElement('th');
+			descriptionHeader.className = 'fc-list-event-description';
+			descriptionHeader.textContent = LANGS.listDescription;
+			headerRow.appendChild(descriptionHeader);
+
+			headerRow.dataset.piColumnsReady = '1';
 		}
 
-		const thirdPartyHeader = document.createElement('th');
-		thirdPartyHeader.className = 'fc-list-event-thirdparty';
-		thirdPartyHeader.textContent = LANGS.listThirdParty;
-		headerRow.appendChild(thirdPartyHeader);
-
-		const descriptionHeader = document.createElement('th');
-		descriptionHeader.className = 'fc-list-event-description';
-		descriptionHeader.textContent = LANGS.listDescription;
-		headerRow.appendChild(descriptionHeader);
-
-		headerRow.dataset.piColumnsReady = '1';
-
-		const totalColumns = headerRow.querySelectorAll('th').length;
-		if (totalColumns > 0) {
-			table.querySelectorAll('tbody tr.fc-list-day th, tbody tr.fc-list-day td, tbody tr.fc-list-empty td').forEach((cell) => {
-				cell.setAttribute('colspan', String(totalColumns));
-			});
-		}
+		const listColspan = 12;
+		table.querySelectorAll('th').forEach((cell) => {
+			cell.setAttribute('colspan', String(listColspan));
+		});
+		table.querySelectorAll('tbody tr.fc-list-day th, tbody tr.fc-list-day td, tbody tr.fc-list-empty td').forEach((cell) => {
+			cell.setAttribute('colspan', String(listColspan));
+		});
 	}
 
 	function parseWorkRanges(rawRanges) {
@@ -79,6 +83,14 @@ document.addEventListener('DOMContentLoaded', function () {
 		const hours = Math.floor(boundedMinutes / 60);
 		const mins = boundedMinutes % 60;
 		return String(hours).padStart(2, '0') + ':' + String(mins).padStart(2, '0') + ':00';
+	}
+
+	function formatDateKeyLocal(dateValue) {
+		if (!(dateValue instanceof Date)) return '';
+		const year = String(dateValue.getFullYear());
+		const month = String(dateValue.getMonth() + 1).padStart(2, '0');
+		const day = String(dateValue.getDate()).padStart(2, '0');
+		return year + '-' + month + '-' + day;
 	}
 
 	function computeBoundsForDates(startDate, endDateExclusive) {
@@ -130,6 +142,12 @@ document.addEventListener('DOMContentLoaded', function () {
 		calendar.setOption('slotMaxTime', bounds.slotMaxTime);
 	}
 
+	function extractInterventionNumericId(rawValue) {
+		const stringValue = String(rawValue || '');
+		const match = stringValue.match(/(?:row_|parent_)?([0-9]+)/);
+		return match ? parseInt(match[1], 10) : 0;
+	}
+
 	fetch('ajax/planning_options.php')
 		.then(res => res.json())
 		.then(data => {
@@ -161,7 +179,19 @@ document.addEventListener('DOMContentLoaded', function () {
 	});
 
 	var calendarEl = document.getElementById('calendar');
-	const currentDolScreenWidth = (typeof dol_screenwidth !== 'undefined') ? parseInt(dol_screenwidth, 10) : window.innerWidth;
+	const currentDolScreenWidth = (() => {
+		const legacyDolScreenWidth = parseInt((typeof dol_screenwidth !== 'undefined') ? dol_screenwidth : '', 10);
+		if (!isNaN(legacyDolScreenWidth) && legacyDolScreenWidth > 0) {
+			return legacyDolScreenWidth;
+		}
+
+		const sessionDolScreenWidth = parseInt((typeof DOL_SCREENWIDTH_SESSION !== 'undefined') ? DOL_SCREENWIDTH_SESSION : '', 10);
+		if (!isNaN(sessionDolScreenWidth) && sessionDolScreenWidth > 0) {
+			return sessionDolScreenWidth;
+		}
+
+		return window.innerWidth;
+	})();
 	const toolbarRight = (currentDolScreenWidth < 500) ? 'timeGridDay,listWeek' : 'dayGridMonth,timeGridWeek,timeGridDay,listWeek';
 
 	var calendar = new FullCalendar.Calendar(calendarEl, {
@@ -216,7 +246,11 @@ document.addEventListener('DOMContentLoaded', function () {
 		eventDurationEditable: false,
 		locale: USER_LANG.split("_")[0],
 		datesSet: function (info) {
+			monthViewRenderedKeys.clear();
 			applyWorkingHoursVisibility(info.view);
+			if (info.view.type.startsWith('list')) {
+				setTimeout(() => ensureListColumnsHeader(), 0);
+			}
 		},
 		events: function (fetchInfo, successCallback, failureCallback) {
 
@@ -279,7 +313,20 @@ document.addEventListener('DOMContentLoaded', function () {
         eventWillUnmount: function (info) {
             eventElements.delete(info.event.id);
         },
-        eventDidMount: function (info) {
+		eventDidMount: function (info) {
+			if (info.view.type === 'dayGridMonth') {
+				const dayKey = formatDateKeyLocal(info.event.start);
+				const refKey = String(info.event.extendedProps.ref || info.event.title || '');
+				const monthUniqueKey = dayKey + '|' + refKey;
+				if (dayKey && refKey) {
+					if (monthViewRenderedKeys.has(monthUniqueKey)) {
+						info.el.style.display = 'none';
+						return;
+					}
+					monthViewRenderedKeys.add(monthUniqueKey);
+				}
+			}
+
             let eventEl = info.el;
             let type    = info.event.extendedProps.type;
             let parentId = info.event.extendedProps.parentId || null, id;
@@ -290,11 +337,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 parentId = parentId || id;
             }
 
+			const normalizedId = extractInterventionNumericId(id);
+			const normalizedParentId = extractInterventionNumericId(parentId);
+
 
             if (!eventElements.has(info.event.id)) eventElements.set(info.event.id, []);
             eventElements.get(info.event.id).push(info.el);
 
-            fetch(`ajax/detail.php?id=${id}&parentId=${parentId || ''}&type=${type}`)
+            fetch(`ajax/detail.php?id=${normalizedId}&parentId=${normalizedParentId || ''}&type=${type}`)
                 .then(res => res.text())
                 .then(html => {
                     let product_image = info.event.extendedProps.product_image || '';
@@ -399,7 +449,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function updateEvent(event) {
         let formData = new URLSearchParams();
-        let id = event.extendedProps.parentId || event.id.replace(/^(row_|parent_)/, '');
+        let id = extractInterventionNumericId(event.extendedProps.parentId || event.id);
         let type = event.extendedProps.type;
         formData.append('token', DOL_TOKEN);
         formData.append('id', id);
