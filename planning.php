@@ -70,7 +70,13 @@ $holidayColor = getDolGlobalString('PLANNINGINTERVENTION_COLOR_HOLIDAY', '#eca76
     }
 </style>
 
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
 <title>Planning des Interventions</title>
+<script>
+	if (typeof FullCalendar === 'undefined') {
+		document.write('<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"><\/script>');
+	}
+</script>
 <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/dist/tippy.css" />
 <script src="https://unpkg.com/@popperjs/core@2"></script>
 <script src="https://unpkg.com/tippy.js@6"></script>

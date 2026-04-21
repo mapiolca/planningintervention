@@ -1,21 +1,6 @@
 /* Copyright (C) 2026		Pierre Ardoin				<developpeur@lesmetiersdubatiment.fr> */
 
 document.addEventListener('DOMContentLoaded', function () {
-	if (window.__piCalendarInitialized) {
-		return;
-	}
-
-	if (typeof FullCalendar === 'undefined' || !FullCalendar.Calendar) {
-		const retryCount = (window.__piCalendarRetryCount || 0) + 1;
-		window.__piCalendarRetryCount = retryCount;
-		if (retryCount <= 30) {
-			setTimeout(() => {
-				document.dispatchEvent(new Event('DOMContentLoaded'));
-			}, 100);
-		}
-		return;
-	}
-	window.__piCalendarInitialized = true;
 
 	let publicHolidays = [];
 	let rights = {};
