@@ -606,7 +606,7 @@ class modPlanningIntervention extends DolibarrModules
 					'', //$enabled
 					0, //$totalizable
 					0, //$printable
-					array(), //$moreparams
+					'', //$moreparams
 					'', //$aiprompt
 					0, //$emptyonclone
 					0 //$showintooltip
