@@ -189,10 +189,11 @@ while ($obj = $db->fetch_object($resqlParents)) {
 		$timePart = strlen($datePrevue) >= 19 ? substr($datePrevue, 11, 8) : '';
 		$hasPlannedTime = (!empty($timePart) && $timePart !== '00:00:00');
 		$hasPlannedEnd = !empty($dateFinPrevue) && $dateFinPrevue !== '0000-00-00 00:00:00';
-		$openingHoursMode = strtoupper(trim((string) $obj->ignore_opening_hours));
-		$ignoreOpeningHours = ($openingHoursMode === 'IGNORE');
-		$allowStartBeforeWork = ($openingHoursMode === 'START_BEFORE');
-		$allowEndAfterWork = ($openingHoursMode === 'END_AFTER');
+		$openingHoursMode = trim((string) $obj->ignore_opening_hours);
+		$openingHoursModeUpper = strtoupper($openingHoursMode);
+		$ignoreOpeningHours = ($openingHoursModeUpper === 'IGNORE' || stripos($openingHoursMode, 'Ignorer les heures') !== false);
+		$allowStartBeforeWork = ($openingHoursModeUpper === 'START_BEFORE' || stripos($openingHoursMode, 'Débuter avant') !== false || stripos($openingHoursMode, 'Debuter avant') !== false);
+		$allowEndAfterWork = ($openingHoursModeUpper === 'END_AFTER' || stripos($openingHoursMode, 'Terminer après') !== false || stripos($openingHoursMode, 'Terminer apres') !== false);
 
 		if ($hasPlannedTime) {
 		$startTimestamp = strtotime(substr($datePrevue, 0, 19));

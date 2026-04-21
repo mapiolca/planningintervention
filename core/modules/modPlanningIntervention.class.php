@@ -569,8 +569,8 @@ class modPlanningIntervention extends DolibarrModules
 
 		$ignoreHoursFieldName = 'ignore_opening_hours';
 		$ignoreHoursFieldLabel = 'Ignorer les horaires d\'ouvertures';
-		$ignoreHoursFieldHelp = 'Options: IGNORE, START_BEFORE, END_AFTER';
-		$ignoreHoursOptions = 'IGNORE:Ignorer les heures d\'ouvertures,START_BEFORE:Débuter avant l\'heure d\'embauche,END_AFTER:Terminer après l\'heure de débauche';
+		$ignoreHoursFieldHelp = 'Ignorer les heures d\'ouvertures = intervention continue. Débuter avant l\'heure d\'embauche = autorise un démarrage avant l\'horaire. Terminer après l\'heure de débauche = autorise une fin après l\'horaire.';
+		$ignoreHoursOptions = 'Ignorer les heures d\'ouvertures,Débuter avant l\'heure d\'embauche,Terminer après l\'heure de débauche';
 
 		$resql = $db->query("SELECT rowid FROM ".MAIN_DB_PREFIX."extrafields WHERE elementtype='".$db->escape($elementType)."' AND name='".$db->escape($ignoreHoursFieldName)."'");
 		if ($resql && $db->num_rows($resql) == 0) {
