@@ -590,12 +590,18 @@ class modPlanningIntervention extends DolibarrModules
 					0,
 					0,
 					'',
-					$ignoreHoursOptions,
-					1,
-					'',
-					3,
-					$ignoreHoursFieldHelp
-				);
+						$ignoreHoursOptions,
+						1,
+						'',
+						3,
+						$ignoreHoursFieldHelp,
+						0,
+						'',
+						'',
+						'',
+						'planningintervention@planningintervention',
+						'isModEnabled("planningintervention")'
+					);
 			if ($result <= 0) {
 				return -1;
 			}
