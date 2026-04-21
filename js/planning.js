@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 		const totalColumns = headerRow.querySelectorAll('th').length;
 		if (totalColumns > 0) {
-			table.querySelectorAll('tbody tr.fc-list-day td').forEach((cell) => {
+			table.querySelectorAll('tbody tr.fc-list-day th, tbody tr.fc-list-day td, tbody tr.fc-list-empty td').forEach((cell) => {
 				cell.setAttribute('colspan', String(totalColumns));
 			});
 		}
