@@ -304,6 +304,13 @@ class modPlanningIntervention extends DolibarrModules
 		$this->rights[$r][1] = 'Modifier Planning Intervention';
 		$this->rights[$r][3] = 0;
 		$this->rights[$r][4] = 'write';
+
+		$r++;
+
+		$this->rights[$r][0] = 7100013;
+		$this->rights[$r][1] = 'Lire son planning d\'intervention et celui de ses subordonnés';
+		$this->rights[$r][3] = 0;
+		$this->rights[$r][4] = 'readmyteam';
 		// Add here entries to declare new permissions
 		/* BEGIN MODULEBUILDER PERMISSIONS */
 		/*
@@ -507,39 +514,58 @@ class modPlanningIntervention extends DolibarrModules
 		dol_include_once('/core/class/extrafields.class.php');
 		$extra = new ExtraFields($db);
 
-		$fieldName    = 'date_prevue';
-		$elementType  = 'fichinter';
+		$elementType = 'fichinter';
+		$plannedDateFields = array(
+			array(
+				'name' => 'date_prevue',
+				'label' => 'Date de début prévue',
+				'help' => 'Date de début prévue de l\'intervention',
+				'position' => 100,
+			),
+			array(
+				'name' => 'date_fin_prevue',
+				'label' => 'Date de fin prévue',
+				'help' => 'Date de fin prévue de l\'intervention',
+				'position' => 110,
+			),
+		);
 
-		// create extrafield if not exists
-		$resql = $db->query("SELECT rowid FROM ".MAIN_DB_PREFIX."extrafields WHERE elementtype='".$db->escape($elementType)."' AND name='".$db->escape($fieldName)."'");
-		if ($resql && $db->num_rows($resql) == 0) {
-			
-			$result = $extra->addExtraField(
-				$fieldName,                 // attrname 
-				'Date prévue',              // label
-				'datetime',                 // type
-				100,                        // pos
-				'',                         // size 
-				$elementType,               // elementtype
-				0,                          // unique
-				0,                          // required
-				'',                         // default_value
-				'',                         // param (string)
-				1,                          // alwayseditable
-				'',                         // perms
-				3,                          // list (affichage dans listes)
-				'Date prévue de l\'intervention' // help
-			);
+		foreach ($plannedDateFields as $fieldMeta) {
+			$fieldName = $fieldMeta['name'];
 
-			if ($result <= 0) {
-				return -1;
+			// create extrafield if not exists
+			$resql = $db->query("SELECT rowid FROM ".MAIN_DB_PREFIX."extrafields WHERE elementtype='".$db->escape($elementType)."' AND name='".$db->escape($fieldName)."'");
+			if ($resql && $db->num_rows($resql) == 0) {
+				$result = $extra->addExtraField(
+					$fieldName,
+					$fieldMeta['label'],
+					'datetime',
+					$fieldMeta['position'],
+					'',
+					$elementType,
+					0,
+					0,
+					'',
+					'',
+					1,
+					'',
+					3,
+					$fieldMeta['help']
+				);
+
+				if ($result <= 0) {
+					return -1;
+				}
 			}
-		}
 
-		// enable extrafield (in case it already exists but was disabled)
-		$db->query("UPDATE ".MAIN_DB_PREFIX."extrafields SET enabled = 1
-					WHERE elementtype='".$db->escape($elementType)."'
-					AND name='".$db->escape($fieldName)."'");
+			// ensure label/help are up to date and field enabled
+			$db->query("UPDATE ".MAIN_DB_PREFIX."extrafields
+				SET label = '".$db->escape($fieldMeta['label'])."',
+					help = '".$db->escape($fieldMeta['help'])."',
+					enabled = 1
+				WHERE elementtype = '".$db->escape($elementType)."'
+				AND name = '".$db->escape($fieldName)."'");
+		}
 
 		return $this->_init($sql, $options);
 	}
@@ -554,13 +580,15 @@ class modPlanningIntervention extends DolibarrModules
 
 		$sql = array();
 
-		$fieldName   = 'date_prevue';
 		$elementType = 'fichinter';
+		$plannedDateFields = array('date_prevue', 'date_fin_prevue');
 
-		// Hide extrafield (we keep data)
-		$db->query("UPDATE ".MAIN_DB_PREFIX."extrafields SET enabled = 0
+		foreach ($plannedDateFields as $fieldName) {
+			// Hide extrafield (we keep data)
+			$db->query("UPDATE ".MAIN_DB_PREFIX."extrafields SET enabled = 0
 					WHERE elementtype='".$db->escape($elementType)."'
 					AND name='".$db->escape($fieldName)."'");
+		}
 
 		return $this->_remove($sql, $options);
 	}

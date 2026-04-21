@@ -1,99 +1,139 @@
 document.addEventListener('DOMContentLoaded', function () {
 
-    let publicHolidays = [];
-    let rights = {};
-    let eventElements = new Map();
+	let publicHolidays = [];
+	let rights = {};
+	let eventElements = new Map();
+	let hideWeekends = 0;
+	let greyWeekends = 0;
+	let dayViewShowCustomer = false;
 
-    fetch('ajax/planning_options.php')
-    .then(res => res.json())
-    .then(data => {
-        publicHolidays = data.publicHolidays;
-        hideWeekends   = data.hideWeekends;
-        greyWeekends   = data.greyWeekend;
-        rights         = data.rights;
+	const isMobileView = window.matchMedia('(max-width: 767px)').matches;
 
-        calendar.setOption('weekends', !hideWeekends);
-        calendar.setOption('editable', rights.writePlanning);
-        calendar.render();
-    });
-    
+	function ensureListColumnsHeader() {
+		const table = calendarEl.querySelector('.fc-list-table');
+		if (!table) return;
 
-    const elements = document.querySelectorAll('.filter-multi');
+		const headerRow = table.querySelector('thead tr');
+		if (!headerRow || headerRow.dataset.piColumnsReady === '1') return;
 
-    elements.forEach((element) => {
-        new Choices(element, {
-            removeItemButton: true,
-            itemSelectText: '',
-            placeholder: true,
-            placeholderValue: element.dataset.label || 'Filtrer',
-            shouldSort: false,
-        });
-    });
+		const titleHeader = headerRow.querySelector('.fc-list-event-title');
+		if (titleHeader) {
+			titleHeader.textContent = LANGS.intervention;
+		}
 
+		const thirdPartyHeader = document.createElement('th');
+		thirdPartyHeader.className = 'fc-list-event-thirdparty';
+		thirdPartyHeader.textContent = LANGS.listThirdParty;
+		headerRow.appendChild(thirdPartyHeader);
 
-    var calendarEl = document.getElementById('calendar');
+		const descriptionHeader = document.createElement('th');
+		descriptionHeader.className = 'fc-list-event-description';
+		descriptionHeader.textContent = LANGS.listDescription;
+		headerRow.appendChild(descriptionHeader);
 
-    var calendar = new FullCalendar.Calendar(calendarEl, {
-        initialView: 'dayGridMonth',
-        firstDay: 1,
-        displayEventTime: false,
-        height: 'auto',
-        eventOrder: 'duration', 
-        customButtons: {
-            refresh: {
-                text: '🔄',
-                click: function () {
-                    calendarEl.style.transition = 'opacity 0.15s';
-                    calendarEl.style.opacity = '0.4';
+		headerRow.dataset.piColumnsReady = '1';
+	}
 
-                    setTimeout(() => {
-                        calendar.refetchEvents();
-                    }, 100);
+	fetch('ajax/planning_options.php')
+		.then(res => res.json())
+		.then(data => {
+			publicHolidays = data.publicHolidays;
+			hideWeekends = data.hideWeekends;
+			greyWeekends = data.greyWeekend;
+			dayViewShowCustomer = data.dayViewShowCustomer;
+			rights = data.rights;
 
-                    setTimeout(() => {
-                        calendarEl.style.opacity = '1';
-                    }, 200);
-                }
-            }
-        },
-        headerToolbar: {
-            left: 'prev,next today refresh',
-            center: 'title',
-            right: 'dayGridMonth listMonth'
-        },
-        buttonText: {
-            today: LANGS.today,
-            month: LANGS.month,
-            week: LANGS.week,
-            list: LANGS.list,
-            day: LANGS.day
-        },
-        eventResizableFromStart: false,
-        eventDurationEditable: false,
-        locale: USER_LANG.split("_")[0],
-        events: function(fetchInfo, successCallback, failureCallback) {
+			calendar.setOption('weekends', !hideWeekends);
+			calendar.setOption('editable', rights.writePlanning);
+			calendar.render();
+		});
 
-            let filters = getFilters();
+	const elements = document.querySelectorAll('.filter-multi');
 
-            let params = new URLSearchParams();
-            params.append('status', filters.status);
-            params.append('showTreated', filters.showTreated ? 1 : 0);
+	elements.forEach((element) => {
+		new Choices(element, {
+			removeItemButton: true,
+			itemSelectText: '',
+			placeholder: true,
+			placeholderValue: element.dataset.label || 'Filtrer',
+			shouldSort: false,
+		});
+	});
 
-            params.append('clients',   filters.clients);
-            params.append('commandes', filters.commandes);
-            params.append('intervention', filters.intervention);
+	var calendarEl = document.getElementById('calendar');
+
+	var calendar = new FullCalendar.Calendar(calendarEl, {
+		initialView: isMobileView ? 'timeGridDay' : 'dayGridMonth',
+		firstDay: 1,
+		displayEventTime: true,
+		height: 'auto',
+		eventOrder: 'duration',
+		customButtons: {
+			refresh: {
+				text: '🔄',
+				click: function () {
+					calendarEl.style.transition = 'opacity 0.15s';
+					calendarEl.style.opacity = '0.4';
+
+					setTimeout(() => {
+						calendar.refetchEvents();
+					}, 100);
+
+					setTimeout(() => {
+						calendarEl.style.opacity = '1';
+					}, 200);
+				}
+			}
+		},
+		headerToolbar: {
+			left: 'prev,next today refresh',
+			center: 'title',
+			right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+		},
+		buttonText: {
+			today: LANGS.today,
+			month: LANGS.month,
+			week: LANGS.week,
+			list: LANGS.list,
+			day: LANGS.day
+		},
+		views: {
+			dayGridMonth: {
+				displayEventTime: false
+			},
+			timeGridWeek: {
+				allDaySlot: true
+			},
+			timeGridDay: {
+				allDaySlot: true
+			}
+		},
+		eventResizableFromStart: false,
+		eventDurationEditable: false,
+		locale: USER_LANG.split("_")[0],
+		events: function (fetchInfo, successCallback, failureCallback) {
+
+			let filters = getFilters();
+
+			let params = new URLSearchParams();
+			params.append('status', filters.status);
+			params.append('showTreated', filters.showTreated ? 1 : 0);
+
+			params.append('clients', filters.clients);
+			params.append('commandes', filters.commandes);
+			params.append('intervention', filters.intervention);
             // params.append('dateStart', filters.dateStart);
             // params.append('dateEnd',   filters.dateEnd);
 
 
-            fetch('ajax/events.php?' + params.toString())
-                .then(response => response.json())
-                .then(data => {
-                    console.log(data);
-                    successCallback(data);
-                })
-                .catch(error => failureCallback(error));
-        },
+			fetch('ajax/events.php?' + params.toString())
+				.then(response => response.json())
+				.then(data => {
+					console.log(data);
+					successCallback(data);
+				})
+				.catch(error => failureCallback(error));
+		},
 
         eventClick: function (info) {
             calendarEl.querySelectorAll('.fc-event-blink').forEach(el => el.classList.remove('fc-event-blink'));
@@ -167,8 +207,39 @@ document.addEventListener('DOMContentLoaded', function () {
                         maxWidth: 300,
                     });
                 });
+
+			if (info.view.type.startsWith('list') && eventEl.classList.contains('fc-list-event')) {
+				const thirdPartyCell = document.createElement('td');
+				thirdPartyCell.className = 'fc-list-event-thirdparty';
+				thirdPartyCell.textContent = info.event.extendedProps.customerName || '';
+				eventEl.appendChild(thirdPartyCell);
+
+				const descriptionCell = document.createElement('td');
+				descriptionCell.className = 'fc-list-event-description';
+				descriptionCell.textContent = info.event.extendedProps.description || '';
+				eventEl.appendChild(descriptionCell);
+
+				ensureListColumnsHeader();
+			}
         },
-        eventContent: function(arg) {
+		eventContent: function(arg) {
+
+			if (arg.view.type === 'timeGridDay' && dayViewShowCustomer) {
+				const customerName = arg.event.extendedProps.customerName || '';
+				if (customerName) {
+					let wrapperNode = document.createElement('div');
+
+					let customerNode = document.createElement('div');
+					customerNode.innerText = customerName;
+					wrapperNode.appendChild(customerNode);
+
+					let refNode = document.createElement('small');
+					refNode.innerText = arg.event.title || '';
+					wrapperNode.appendChild(refNode);
+
+					return { domNodes: [wrapperNode] };
+				}
+			}
             
             if (arg.view.type.startsWith('list')) {
                 
@@ -210,9 +281,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     
 
-    ['filterStatus', 'filterClient', 'filterShowTreated', 'filterIntervention'].forEach(id => {
-            document.getElementById(id).addEventListener('change', () => calendar.refetchEvents());
-    });
+	['filterStatus', 'filterClient', 'filterShowTreated', 'filterIntervention'].forEach(id => {
+		document.getElementById(id).addEventListener('change', () => calendar.refetchEvents());
+	});
 
     // ['filterDateStart', 'filterDateEnd'].forEach(id => {
     //     document.getElementById(id).addEventListener('input', () => calendar.refetchEvents());

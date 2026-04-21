@@ -152,6 +152,9 @@ $formSetup->newItem('PLANNINGINTERVENTION_HIDE_WEEKENDS')->setAsYesNo();
 // Griser les weekends
 $formSetup->newItem('PLANNINGINTERVENTION_GREY_WEEKEND')->setAsYesNo();
 
+// Affichage du nom du tiers en vue Jour
+$formSetup->newItem('PLANNINGINTERVENTION_DAY_VIEW_SHOW_CUSTOMER')->setAsYesNo();
+
 
 
 //$item = $formSetup->newItem('PLANNINGINTERVENTION_MYPARAM13')->setAsDate();	// Not yet implemented

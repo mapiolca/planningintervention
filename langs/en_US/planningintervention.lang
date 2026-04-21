@@ -51,6 +51,9 @@ PLANNINGINTERVENTION_HOLIDAY_COUNTRY = Country for public holidays
 NewSectionHolidays = Public holidays & Leaves
 PLANNINGINTERVENTION_GREY_WEEKEND = Gray weekends
 PLANNINGINTERVENTION_HIDE_WEEKENDS = Hide weekends
+PLANNINGINTERVENTION_DAY_VIEW_SHOW_CUSTOMER = Day view: show third-party name instead of intervention reference
+PLANNINGINTERVENTION_LIST_THIRD_PARTY = Third party
+PLANNINGINTERVENTION_LIST_DESCRIPTION = Description
 NewSectionCalendar = Calendar Display
 
 PLANNING_INTERVENTION = Intervention Planning
