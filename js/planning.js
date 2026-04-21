@@ -179,13 +179,12 @@ document.addEventListener('DOMContentLoaded', function () {
         eventDidMount: function (info) {
             let eventEl = info.el;
             let type    = info.event.extendedProps.type;
-            let parentId, id;
+            let parentId = info.event.extendedProps.parentId || null, id;
             if (type =='row'){
-                parentId = info.event.extendedProps.parentId;
                 id = info.event.id.replace(/^(row_|parent_)/, '');
             } else {
-                id = info.event.id.replace(/^(row_|parent_)/, '');
-                parentId = id
+                id = parentId || info.event.id.replace(/^(row_|parent_)/, '');
+                parentId = parentId || id;
             }
 
 
@@ -297,7 +296,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function updateEvent(event) {
         let formData = new URLSearchParams();
-        let id = event.id.replace(/^(row_|parent_)/, '');
+        let id = event.extendedProps.parentId || event.id.replace(/^(row_|parent_)/, '');
         let type = event.extendedProps.type;
         formData.append('token', DOL_TOKEN);
         formData.append('id', id);

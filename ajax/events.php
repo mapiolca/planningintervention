@@ -203,6 +203,7 @@ while ($obj = $db->fetch_object($resqlParents)) {
 							'extendedProps' => [
 								'type' => 'parent',
 								'ref' => $obj->ref,
+								'parentId' => (int) $obj->rowid,
 								'customerName' => (string) $obj->customer_name,
 								'description' => trim(dol_string_nohtmltag((string) $obj->description))
 							],
@@ -242,6 +243,7 @@ while ($obj = $db->fetch_object($resqlParents)) {
 		'extendedProps' => [
 			'type' => 'parent',
 			'ref' => $obj->ref,
+			'parentId' => (int) $obj->rowid,
 			'customerName' => (string) $obj->customer_name,
 			'description' => trim(dol_string_nohtmltag((string) $obj->description))
 		],
