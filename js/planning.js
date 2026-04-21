@@ -32,6 +32,13 @@ document.addEventListener('DOMContentLoaded', function () {
 		headerRow.appendChild(descriptionHeader);
 
 		headerRow.dataset.piColumnsReady = '1';
+
+		const totalColumns = headerRow.querySelectorAll('th').length;
+		if (totalColumns > 0) {
+			table.querySelectorAll('tbody tr.fc-list-day td').forEach((cell) => {
+				cell.setAttribute('colspan', String(totalColumns));
+			});
+		}
 	}
 
 	fetch('ajax/planning_options.php')
