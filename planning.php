@@ -30,6 +30,10 @@ if (!$user->rights->planningintervention->read && !$user->rights->planninginterv
     accessforbidden();
 }
 
+$nativeAgendaUrl = DOL_URL_ROOT.'/comm/action/index.php';
+header('Location: '.$nativeAgendaUrl);
+exit;
+
 print '<link rel="stylesheet" href="'.DOL_URL_ROOT.'/custom/planningintervention/css/planning.css">';
 
 //  customers
@@ -72,7 +76,11 @@ $holidayColor = getDolGlobalString('PLANNINGINTERVENTION_COLOR_HOLIDAY', '#eca76
 
 <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
 <title>Planning des Interventions</title>
-<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+<script>
+	if (typeof FullCalendar === 'undefined') {
+		document.write('<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"><\/script>');
+	}
+</script>
 <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/dist/tippy.css" />
 <script src="https://unpkg.com/@popperjs/core@2"></script>
 <script src="https://unpkg.com/tippy.js@6"></script>
@@ -86,6 +94,7 @@ $holidayColor = getDolGlobalString('PLANNINGINTERVENTION_COLOR_HOLIDAY', '#eca76
 <script>
     var DOL_TOKEN = '<?php echo $_SESSION['newtoken']; ?>';
     var DOL_URL_ROOT = '<?php echo DOL_URL_ROOT; ?>';
+    var DOL_SCREENWIDTH_SESSION = '<?php echo isset($_SESSION['dol_screenwidth']) ? (int) $_SESSION['dol_screenwidth'] : 0; ?>';
 
     const USER_LANG = "<?php echo $langs->defaultlang; ?>";
 
@@ -117,7 +126,7 @@ $holidayColor = getDolGlobalString('PLANNINGINTERVENTION_COLOR_HOLIDAY', '#eca76
             <select id="filterStatus" class="filter-multi" data-label="<?php echo $langs->trans("Status"); ?>" multiple name="status[]">
                 <option value="0"><?php echo $langs->trans("Draft"); ?></option>
                 <option value="1"><?php echo $langs->trans("Validated"); ?></option>
-                <option value="3"><?php echo $langs->trans("Done"); ?></option>
+                <option value="2"><?php echo $langs->trans("Done"); ?></option>
             </select>
         </div>
 
