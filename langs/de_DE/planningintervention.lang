@@ -1,3 +1,5 @@
 # Translation file
 
 PLANNINGINTERVENTION_DAY_VIEW_SHOW_CUSTOMER = Tagesansicht: Firmenname statt Interventionsreferenz anzeigen
+PLANNINGINTERVENTION_LIST_THIRD_PARTY = Drittpartei
+PLANNINGINTERVENTION_LIST_DESCRIPTION = Beschreibung

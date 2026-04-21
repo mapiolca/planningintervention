@@ -9,6 +9,31 @@ document.addEventListener('DOMContentLoaded', function () {
 
 	const isMobileView = window.matchMedia('(max-width: 767px)').matches;
 
+	function ensureListColumnsHeader() {
+		const table = calendarEl.querySelector('.fc-list-table');
+		if (!table) return;
+
+		const headerRow = table.querySelector('thead tr');
+		if (!headerRow || headerRow.dataset.piColumnsReady === '1') return;
+
+		const titleHeader = headerRow.querySelector('.fc-list-event-title');
+		if (titleHeader) {
+			titleHeader.textContent = LANGS.intervention;
+		}
+
+		const thirdPartyHeader = document.createElement('th');
+		thirdPartyHeader.className = 'fc-list-event-thirdparty';
+		thirdPartyHeader.textContent = LANGS.listThirdParty;
+		headerRow.appendChild(thirdPartyHeader);
+
+		const descriptionHeader = document.createElement('th');
+		descriptionHeader.className = 'fc-list-event-description';
+		descriptionHeader.textContent = LANGS.listDescription;
+		headerRow.appendChild(descriptionHeader);
+
+		headerRow.dataset.piColumnsReady = '1';
+	}
+
 	fetch('ajax/planning_options.php')
 		.then(res => res.json())
 		.then(data => {
@@ -182,6 +207,20 @@ document.addEventListener('DOMContentLoaded', function () {
                         maxWidth: 300,
                     });
                 });
+
+			if (info.view.type.startsWith('list') && eventEl.classList.contains('fc-list-event')) {
+				const thirdPartyCell = document.createElement('td');
+				thirdPartyCell.className = 'fc-list-event-thirdparty';
+				thirdPartyCell.textContent = info.event.extendedProps.customerName || '';
+				eventEl.appendChild(thirdPartyCell);
+
+				const descriptionCell = document.createElement('td');
+				descriptionCell.className = 'fc-list-event-description';
+				descriptionCell.textContent = info.event.extendedProps.description || '';
+				eventEl.appendChild(descriptionCell);
+
+				ensureListColumnsHeader();
+			}
         },
 		eventContent: function(arg) {
 
