@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	var calendarEl = document.getElementById('calendar');
 
 	var calendar = new FullCalendar.Calendar(calendarEl, {
-		initialView: isMobileView ? 'dayGridDay' : 'dayGridWeek',
+		initialView: isMobileView ? 'dayGridDay' : 'dayGridMonth',
 		firstDay: 1,
 		displayEventTime: false,
 		height: 'auto',
@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', function () {
 		headerToolbar: {
 			left: 'prev,next today refresh',
 			center: 'title',
-			right: 'dayGridWeek,dayGridDay,listWeek'
+			right: 'dayGridMonth,dayGridWeek,dayGridDay,listWeek'
 		},
 		buttonText: {
 			today: LANGS.today,
