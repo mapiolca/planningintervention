@@ -70,16 +70,9 @@ $holidayColor = getDolGlobalString('PLANNINGINTERVENTION_COLOR_HOLIDAY', '#eca76
     }
 </style>
 
-<link href="https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.8/index.min.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@6.1.8/index.min.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/@fullcalendar/timegrid@6.1.8/index.min.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/@fullcalendar/list@6.1.8/index.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
 <title>Planning des Interventions</title>
-<script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.8/index.global.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@fullcalendar/interaction@6.1.8/index.global.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@6.1.8/index.global.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@fullcalendar/timegrid@6.1.8/index.global.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@fullcalendar/list@6.1.8/index.global.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
 <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/dist/tippy.css" />
 <script src="https://unpkg.com/@popperjs/core@2"></script>
 <script src="https://unpkg.com/tippy.js@6"></script>
