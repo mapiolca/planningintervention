@@ -1,6 +1,9 @@
 /* Copyright (C) 2026		Pierre Ardoin				<developpeur@lesmetiersdubatiment.fr> */
 
 document.addEventListener('DOMContentLoaded', function () {
+	if (typeof FullCalendar === 'undefined' || !FullCalendar.Calendar) {
+		return;
+	}
 
 	let publicHolidays = [];
 	let rights = {};
