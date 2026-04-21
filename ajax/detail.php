@@ -123,12 +123,13 @@ if ($resInter > 0 ) {
     print '<p style="margin:6px 0;"><strong>Contacts :</strong><br>';
 
     while ($obj = $db->fetch_object($resql)) {
-        if (!empty($obj->contact_id)) {
-            $name = trim($obj->contact_firstname.' '.$obj->contact_lastname);
-            $mail = $obj->contact_email;
-        } else {
+        $contactSource = strtolower((string) $obj->source);
+        if ($contactSource === 'internal') {
             $name = trim($obj->user_firstname.' '.$obj->user_lastname);
             $mail = $obj->user_email;
+        } else {
+            $name = trim($obj->contact_firstname.' '.$obj->contact_lastname);
+            $mail = $obj->contact_email;
         }
 
         $type = dol_escape_htmltag($obj->libelle);
