@@ -23,9 +23,10 @@ $sqlRows = "SELECT inter.rowid, parent.ref, inter.date, parent.rowid as parentId
         WHERE inter.date IS NOT NULL
           ";
 
-$sqlParents = "SELECT parent.rowid, parent.ref, parent.fk_statut as status, extra.date_prevue
+$sqlParents = "SELECT parent.rowid, parent.ref, parent.fk_statut as status, extra.date_prevue, s.nom as customer_name
         FROM ".MAIN_DB_PREFIX."fichinter parent
         LEFT JOIN ".MAIN_DB_PREFIX."fichinter_extrafields extra ON extra.fk_object = parent.rowid
+		LEFT JOIN ".MAIN_DB_PREFIX."societe s ON s.rowid = parent.fk_soc
         
         WHERE extra.date_prevue IS NOT NULL
         ";
@@ -110,7 +111,7 @@ while ($obj = $db->fetch_object($resqlParents)) {
 		'end'    => $eventEnd,
 		'allDay' => $eventAllDay,
 		'color'  => $color,
-		'extendedProps' => ['type' => 'parent', 'ref' => $obj->ref],
+		'extendedProps' => ['type' => 'parent', 'ref' => $obj->ref, 'customerName' => (string) $obj->customer_name],
 	];
 
 }

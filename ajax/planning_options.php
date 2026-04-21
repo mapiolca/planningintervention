@@ -41,15 +41,16 @@ if ($resqlCheck && $db->num_rows($resqlCheck) > 0) {
 }
 
 echo json_encode([
-    'publicHolidays' => $publicHolidays,
-    'greyWeekend'    => (bool) getDolGlobalInt('PLANNINGINTERVENTION_GREY_WEEKEND'),
-    'hideWeekends'   => (bool) getDolGlobalInt('PLANNINGINTERVENTION_HIDE_WEEKENDS'),
-    'rights' => [
-        "readPlanning" => $user->hasRight('planningintervention', 'read'),
-        "writePlanning" => $user->hasRight('planningintervention', 'write'),
-        "readExp" => $user->hasRight('ficheinter', 'lire'),
-        "writeExp" => $user->hasRight('ficheinter', 'creer'),
-        
-    ]
-    
+	'publicHolidays' => $publicHolidays,
+	'greyWeekend'    => (bool) getDolGlobalInt('PLANNINGINTERVENTION_GREY_WEEKEND'),
+	'hideWeekends'   => (bool) getDolGlobalInt('PLANNINGINTERVENTION_HIDE_WEEKENDS'),
+	'dayViewShowCustomer' => (bool) getDolGlobalInt('PLANNINGINTERVENTION_DAY_VIEW_SHOW_CUSTOMER'),
+	'rights' => [
+		"readPlanning" => $user->hasRight('planningintervention', 'read'),
+		"writePlanning" => $user->hasRight('planningintervention', 'write'),
+		"readExp" => $user->hasRight('ficheinter', 'lire'),
+		"writeExp" => $user->hasRight('ficheinter', 'creer'),
+
+	]
+
 ]);

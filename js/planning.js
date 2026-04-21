@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	let eventElements = new Map();
 	let hideWeekends = 0;
 	let greyWeekends = 0;
+	let dayViewShowCustomer = false;
 
 	const isMobileView = window.matchMedia('(max-width: 767px)').matches;
 
@@ -14,6 +15,7 @@ document.addEventListener('DOMContentLoaded', function () {
 			publicHolidays = data.publicHolidays;
 			hideWeekends = data.hideWeekends;
 			greyWeekends = data.greyWeekend;
+			dayViewShowCustomer = data.dayViewShowCustomer;
 			rights = data.rights;
 
 			calendar.setOption('weekends', !hideWeekends);
@@ -181,7 +183,16 @@ document.addEventListener('DOMContentLoaded', function () {
                     });
                 });
         },
-        eventContent: function(arg) {
+		eventContent: function(arg) {
+
+			if (arg.view.type === 'timeGridDay' && dayViewShowCustomer) {
+				const customerName = arg.event.extendedProps.customerName || '';
+				if (customerName) {
+					let textNode = document.createElement('span');
+					textNode.innerText = customerName;
+					return { domNodes: [textNode] };
+				}
+			}
             
             if (arg.view.type.startsWith('list')) {
                 
