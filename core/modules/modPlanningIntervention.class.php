@@ -579,12 +579,8 @@ class modPlanningIntervention extends DolibarrModules
 		);
 
 		$resql = $db->query("SELECT rowid FROM ".MAIN_DB_PREFIX."extrafields WHERE elementtype='".$db->escape($elementType)."' AND name='".$db->escape($ignoreHoursFieldName)."'");
-		$columnExists = false;
-		$resqlColumn = $db->query("SHOW COLUMNS FROM ".MAIN_DB_PREFIX.$elementType."_extrafields LIKE '".$db->escape($ignoreHoursFieldName)."'");
-		if ($resqlColumn && $db->num_rows($resqlColumn) > 0) {
-			$columnExists = true;
-		}
-		if ($resql && $db->num_rows($resql) == 0 && !$columnExists) {
+
+		if ($resql && $db->num_rows($resql) == 0) {
 				$result = $extra->addExtraField(
 					$ignoreHoursFieldName, //$attrname
 					$ignoreHoursFieldLabel, //$label
