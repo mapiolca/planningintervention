@@ -227,9 +227,17 @@ document.addEventListener('DOMContentLoaded', function () {
 			if (arg.view.type === 'timeGridDay' && dayViewShowCustomer) {
 				const customerName = arg.event.extendedProps.customerName || '';
 				if (customerName) {
-					let textNode = document.createElement('span');
-					textNode.innerText = customerName;
-					return { domNodes: [textNode] };
+					let wrapperNode = document.createElement('div');
+
+					let customerNode = document.createElement('div');
+					customerNode.innerText = customerName;
+					wrapperNode.appendChild(customerNode);
+
+					let refNode = document.createElement('small');
+					refNode.innerText = arg.event.title || '';
+					wrapperNode.appendChild(refNode);
+
+					return { domNodes: [wrapperNode] };
 				}
 			}
             
