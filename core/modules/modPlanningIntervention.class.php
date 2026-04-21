@@ -568,7 +568,7 @@ class modPlanningIntervention extends DolibarrModules
 		}
 
 		$ignoreHoursFieldName = 'ignore_opening_hours';
-		$ignoreHoursFieldLabel = 'Ignorer les horaires d\'ouvertures';
+		$ignoreHoursFieldLabel = 'IgnoreOpeningHours';
 		$ignoreHoursFieldHelp = 'PLANNINGINTERVENTION_IGNORE_OPENING_HOURS_HELP';
 		$ignoreHoursOptions = array(
 			'options' => array(
