@@ -560,7 +560,7 @@ class modPlanningIntervention extends DolibarrModules
 				'param' => '',
 				'alwayseditable' => 1,
 				'perms' => '',
-				'list' => '3'
+				'list' => '3',
 				'help' => 'PlannedEndDateHelp',
 				'computed' => '',
 				'entity' => '',
