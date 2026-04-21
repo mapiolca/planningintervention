@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	let hideNonWorkingHours = false;
 	let overrunDurationMinutes = 0;
 	let workTimesByDay = {};
+	let monthViewRenderedKeys = new Set();
 
 	const isMobileView = window.matchMedia('(max-width: 767px)').matches;
 
@@ -79,6 +80,14 @@ document.addEventListener('DOMContentLoaded', function () {
 		const hours = Math.floor(boundedMinutes / 60);
 		const mins = boundedMinutes % 60;
 		return String(hours).padStart(2, '0') + ':' + String(mins).padStart(2, '0') + ':00';
+	}
+
+	function formatDateKeyLocal(dateValue) {
+		if (!(dateValue instanceof Date)) return '';
+		const year = String(dateValue.getFullYear());
+		const month = String(dateValue.getMonth() + 1).padStart(2, '0');
+		const day = String(dateValue.getDate()).padStart(2, '0');
+		return year + '-' + month + '-' + day;
 	}
 
 	function computeBoundsForDates(startDate, endDateExclusive) {
@@ -234,6 +243,7 @@ document.addEventListener('DOMContentLoaded', function () {
 		eventDurationEditable: false,
 		locale: USER_LANG.split("_")[0],
 		datesSet: function (info) {
+			monthViewRenderedKeys.clear();
 			applyWorkingHoursVisibility(info.view);
 		},
 		events: function (fetchInfo, successCallback, failureCallback) {
@@ -243,7 +253,6 @@ document.addEventListener('DOMContentLoaded', function () {
 			let params = new URLSearchParams();
 			params.append('status', filters.status);
 			params.append('showTreated', filters.showTreated ? 1 : 0);
-			params.append('viewtype', fetchInfo.view.type);
 
 			params.append('clients', filters.clients);
 			params.append('commandes', filters.commandes);
@@ -299,6 +308,19 @@ document.addEventListener('DOMContentLoaded', function () {
             eventElements.delete(info.event.id);
         },
 		eventDidMount: function (info) {
+			if (info.view.type === 'dayGridMonth') {
+				const dayKey = formatDateKeyLocal(info.event.start);
+				const refKey = String(info.event.extendedProps.ref || info.event.title || '');
+				const monthUniqueKey = dayKey + '|' + refKey;
+				if (dayKey && refKey) {
+					if (monthViewRenderedKeys.has(monthUniqueKey)) {
+						info.el.style.display = 'none';
+						return;
+					}
+					monthViewRenderedKeys.add(monthUniqueKey);
+				}
+			}
+
             let eventEl = info.el;
             let type    = info.event.extendedProps.type;
             let parentId = info.event.extendedProps.parentId || null, id;

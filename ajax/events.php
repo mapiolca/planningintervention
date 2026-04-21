@@ -23,7 +23,6 @@ $statusStr    = GETPOST('status', 'alpha');
 $showTreated = GETPOST('showTreated', 'int');
 $clientsStr   = GETPOST('clients', 'alpha');
 $intervention   = GETPOST('intervention', 'alpha');
-$viewType = GETPOST('viewtype', 'alpha');
 
 function planningInterventionParseWorkRanges($rawRanges)
 {
@@ -204,31 +203,6 @@ while ($obj = $db->fetch_object($resqlParents)) {
 		}
 
 			if ($startTimestamp && $endTimestamp && $endTimestamp > $startTimestamp) {
-				if ($viewType === 'dayGridMonth') {
-					$monthStartDate = date('Y-m-d', $startTimestamp);
-					$monthEndDateExclusive = date('Y-m-d', strtotime('+1 day', strtotime(date('Y-m-d', $endTimestamp))));
-					if ($monthEndDateExclusive <= $monthStartDate) {
-						$monthEndDateExclusive = date('Y-m-d', strtotime('+1 day', strtotime($monthStartDate)));
-					}
-
-					$events[] = [
-						'id'     => 'parent_'.$obj->rowid.'_month',
-						'title'  => $obj->ref,
-						'start'  => $monthStartDate,
-						'end'    => $monthEndDateExclusive,
-						'allDay' => true,
-						'color'  => $color,
-						'extendedProps' => [
-							'type' => 'parent',
-							'ref' => $obj->ref,
-							'parentId' => (int) $obj->rowid,
-							'customerName' => (string) $obj->customer_name,
-							'description' => trim(dol_string_nohtmltag((string) $obj->description))
-						],
-					];
-					continue;
-				}
-
 				if ($ignoreOpeningHours) {
 					$events[] = [
 						'id'     => 'parent_'.$obj->rowid.'_'.date('YmdHi', $startTimestamp),
