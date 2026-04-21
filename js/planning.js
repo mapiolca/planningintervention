@@ -39,12 +39,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
 		headerRow.dataset.piColumnsReady = '1';
 
-		const totalColumns = headerRow.querySelectorAll('th').length;
-		if (totalColumns > 0) {
-			table.querySelectorAll('tbody tr.fc-list-day th, tbody tr.fc-list-day td, tbody tr.fc-list-empty td').forEach((cell) => {
-				cell.setAttribute('colspan', String(totalColumns));
-			});
-		}
+		const listColspan = 12;
+		table.querySelectorAll('tbody tr.fc-list-day th, tbody tr.fc-list-day td, tbody tr.fc-list-empty td').forEach((cell) => {
+			cell.setAttribute('colspan', String(listColspan));
+		});
 	}
 
 	function parseWorkRanges(rawRanges) {
