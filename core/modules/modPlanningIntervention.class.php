@@ -585,7 +585,7 @@ class modPlanningIntervention extends DolibarrModules
 			$columnExists = true;
 		}
 		if ($resql && $db->num_rows($resql) == 0 && !$columnExists) {
-				$result1 = $extra->addExtraField(
+				$result = $extra->addExtraField(
 					$ignoreHoursFieldName, //$attrname
 					$ignoreHoursFieldLabel, //$label
 					'select', //$type
@@ -603,7 +603,7 @@ class modPlanningIntervention extends DolibarrModules
 					'', //$computed
 					'', //$entity
 					'', //$langfile
-					'', //$enabled
+					'' //$enabled
 					);
 			if ($result <= 0) {
 				return -1;
