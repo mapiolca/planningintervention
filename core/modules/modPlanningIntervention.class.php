@@ -584,33 +584,33 @@ class modPlanningIntervention extends DolibarrModules
 		if ($resqlColumn && $db->num_rows($resqlColumn) > 0) {
 			$columnExists = true;
 		}
-
+//addExtraField($attrname, $label, $type, $pos, $size, $elementtype, $unique = 0, $required = 0, $default_value = '', $param = '', $alwayseditable = 0, $perms = '', $list = '-1', $help = '', $computed = '', $entity = '', $langfile = '', $enabled = '1', $totalizable = 0, $printable = 0, $moreparams = array(), $aiprompt = "", $emptyonclone = 0, $showintooltip = 0)
 		if ($resql && $db->num_rows($resql) == 0 && !$columnExists) {
 				$result = $extra->addExtraField(
-					$ignoreHoursFieldName,
-					$ignoreHoursFieldLabel,
-					'select',
-					120,
-					'',
-					$elementType,
-					0,
-					0,
-					'',
-					$ignoreHoursOptions,
-					1,
-					'',
-					-1,
-					$ignoreHoursFieldHelp,
-					'',
-					'',
-					'planningintervention@planningintervention',
-					'isModEnabled("planningintervention")',
-					0,
-					0,
-					array(),
-					'',
-					0,
-					1
+					$ignoreHoursFieldName, //$attrname
+					$ignoreHoursFieldLabel, //$label
+					'select', //$type
+					120, //$pos
+					'', //$size
+					$elementType, //$elementtype
+					0, //$unique
+					0, //$required
+					'', //$default_value
+					$ignoreHoursOptions, //$param
+					1, //$alwayseditable
+					'', //$perms
+					-1, //$list
+					$ignoreHoursFieldHelp, //$help
+					'', //$computed
+					0, //$entity
+					'planningintervention@planningintervention', //$langfile
+					'isModEnabled("planningintervention")', //$enabled
+					0, //$totalizable
+					0, //$printable
+					array(), //$moreparams
+					'', //$aiprompt
+					0, //$emptyonclone
+					0 //$showintooltip
 					);
 			if ($result <= 0) {
 				return -1;
