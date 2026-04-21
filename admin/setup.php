@@ -155,6 +155,9 @@ $formSetup->newItem('PLANNINGINTERVENTION_GREY_WEEKEND')->setAsYesNo();
 // Affichage du nom du tiers en vue Jour
 $formSetup->newItem('PLANNINGINTERVENTION_DAY_VIEW_SHOW_CUSTOMER')->setAsYesNo();
 
+// Masquer les horaires non travaillées en vues Jour/Semaine
+$formSetup->newItem('PLANNINGINTERVENTION_HIDE_NON_WORKING_HOURS')->setAsYesNo();
+
 // Section : Horaires d'intervention
 $formSetup->newItem('NewSectionWorkSchedules')->setAsTitle();
 $formSetup->newItem('PLANNINGINTERVENTION_OVERRUN_DURATION');

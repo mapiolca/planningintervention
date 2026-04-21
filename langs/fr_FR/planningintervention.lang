@@ -52,6 +52,7 @@ NewSectionHolidays = Jours fériés & congés
 PLANNINGINTERVENTION_GREY_WEEKEND = Griser les weekends (Sam/Dim)
 PLANNINGINTERVENTION_HIDE_WEEKENDS = Masquer les weekends (Sam/Dim)
 PLANNINGINTERVENTION_DAY_VIEW_SHOW_CUSTOMER = Vue Jour : afficher le nom du tiers à la place de la référence
+PLANNINGINTERVENTION_HIDE_NON_WORKING_HOURS = Masquer les horaires non travaillées (Jour/Semaine)
 PLANNINGINTERVENTION_LIST_THIRD_PARTY = Tiers
 PLANNINGINTERVENTION_LIST_DESCRIPTION = Description
 NewSectionCalendar = Affichage du calendrier
