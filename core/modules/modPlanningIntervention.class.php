@@ -509,13 +509,20 @@ class modPlanningIntervention extends DolibarrModules
 	public function init($options = '')
 	{
 		global $db;
-
+	
 		$sql = array();
-		
+	
+		// Initialisation standard du module d'abord
+		$result = $this->_init($sql, $options);
+		if ($result <= 0) {
+			return $result;
+		}
+	
 		dol_include_once('/core/class/extrafields.class.php');
 		$extra = new ExtraFields($db);
-
+	
 		$elementType = 'fichinter';
+	
 		$ignoreHoursOptions = array(
 			'options' => array(
 				'1' => 'PLANNINGINTERVENTION_IGNORE_OPENING_HOURS_1',
@@ -523,12 +530,14 @@ class modPlanningIntervention extends DolibarrModules
 				'3' => 'PLANNINGINTERVENTION_IGNORE_OPENING_HOURS_3',
 			),
 		);
+	
 		$plannedDateFields = array(
 			array(
 				'name' => 'date_prevue',
 				'label' => 'PlannedStartDate',
 				'type' => 'datetime',
 				'position' => 100,
+				'size' => '',
 				'elementtype' => $elementType,
 				'unique' => 0,
 				'required' => 0,
@@ -541,10 +550,9 @@ class modPlanningIntervention extends DolibarrModules
 				'computed' => '',
 				'entity' => '',
 				'langfile' => 'planningintervention@planningintervention',
-				'enabled' => 'isModEnabled("planningintervention")',
+				'enabled' => '1',
 				'totalizable' => '',
 				'printable' => '',
-				'moreparam' => array(),
 				'airprompt' => '',
 				'emptyonclone' => 0,
 				'showintooltip' => 0,
@@ -554,6 +562,7 @@ class modPlanningIntervention extends DolibarrModules
 				'label' => 'PlannedEndDate',
 				'type' => 'datetime',
 				'position' => 110,
+				'size' => '',
 				'elementtype' => $elementType,
 				'unique' => 0,
 				'required' => 0,
@@ -566,10 +575,9 @@ class modPlanningIntervention extends DolibarrModules
 				'computed' => '',
 				'entity' => '',
 				'langfile' => 'planningintervention@planningintervention',
-				'enabled' => 'isModEnabled("planningintervention")',
+				'enabled' => '1',
 				'totalizable' => '',
 				'printable' => '',
-				'moreparam' => array(),
 				'airprompt' => '',
 				'emptyonclone' => 0,
 				'showintooltip' => 0,
@@ -584,7 +592,7 @@ class modPlanningIntervention extends DolibarrModules
 				'unique' => 0,
 				'required' => 0,
 				'default_value' => '',
-				'param' => $ignoreHoursOptions, 
+				'param' => $ignoreHoursOptions,
 				'alwayseditable' => 1,
 				'perms' => '',
 				'list' => '-1',
@@ -592,20 +600,18 @@ class modPlanningIntervention extends DolibarrModules
 				'computed' => '',
 				'entity' => '',
 				'langfile' => 'planningintervention@planningintervention',
-				'enabled' => 'isModEnabled("planningintervention")',
+				'enabled' => '1',
 				'totalizable' => '',
 				'printable' => '',
-				'moreparam' => array(),
 				'airprompt' => '',
 				'emptyonclone' => 0,
 				'showintooltip' => 0,
 			),
 		);
-
+	
 		foreach ($plannedDateFields as $fieldMeta) {
-			$fieldName = $fieldMeta['name'];
-			$result = $extra->addExtraField(
-				$fieldName,
+			$extra->addExtraField(
+				$fieldMeta['name'],
 				$fieldMeta['label'],
 				$fieldMeta['type'],
 				$fieldMeta['position'],
@@ -627,10 +633,19 @@ class modPlanningIntervention extends DolibarrModules
 				$fieldMeta['printable'],
 				$fieldMeta['airprompt'],
 				$fieldMeta['emptyonclone'],
-				$fieldMeta['showintooltip'],
+				$fieldMeta['showintooltip']
+			);
+	
+			// Rattrapage si le champ existait déjà avec enabled = 0
+			$db->query(
+				"UPDATE ".MAIN_DB_PREFIX."extrafields
+				 SET enabled = '1'
+				 WHERE elementtype = '".$db->escape($elementType)."'
+				 AND name = '".$db->escape($fieldMeta['name'])."'"
 			);
 		}
-		return $this->_init($sql, $options);
+	
+		return $result;
 	}
 
 	/**
