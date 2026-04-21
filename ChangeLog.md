@@ -1,5 +1,7 @@
 # CHANGELOG MODULE PLANNINGINTERVENTION FOR [DOLIBARR ERP CRM](https://www.dolibarr.org)
 
+Copyright (C) 2026		Pierre Ardoin				<developpeur@lesmetiersdubatiment.fr>
+
 ## 1.1
 
 - Ajout d'un extrafiled "Date de fin prévue"

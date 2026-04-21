@@ -1,3 +1,5 @@
+/* Copyright (C) 2026		Pierre Ardoin				<developpeur@lesmetiersdubatiment.fr> */
+
 document.addEventListener('DOMContentLoaded', function () {
 
 	let publicHolidays = [];

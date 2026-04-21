@@ -1,4 +1,6 @@
 <?php
+/* Copyright (C) 2026		Pierre Ardoin				<developpeur@lesmetiersdubatiment.fr> */
+
 if (file_exists('../../../main.inc.php')) {
     require '../../../main.inc.php';
 } elseif (file_exists('../../main.inc.php')) {
