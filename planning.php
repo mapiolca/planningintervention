@@ -86,6 +86,7 @@ $holidayColor = getDolGlobalString('PLANNINGINTERVENTION_COLOR_HOLIDAY', '#eca76
 <script>
     var DOL_TOKEN = '<?php echo $_SESSION['newtoken']; ?>';
     var DOL_URL_ROOT = '<?php echo DOL_URL_ROOT; ?>';
+    var DOL_SCREENWIDTH_SESSION = '<?php echo isset($_SESSION['dol_screenwidth']) ? (int) $_SESSION['dol_screenwidth'] : 0; ?>';
 
     const USER_LANG = "<?php echo $langs->defaultlang; ?>";
 

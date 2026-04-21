@@ -167,7 +167,20 @@ document.addEventListener('DOMContentLoaded', function () {
 	});
 
 	var calendarEl = document.getElementById('calendar');
-	const toolbarRight = 'dayGridMonth,timeGridWeek,timeGridDay,listWeek';
+	const currentDolScreenWidth = (() => {
+		const legacyDolScreenWidth = parseInt((typeof dol_screenwidth !== 'undefined') ? dol_screenwidth : '', 10);
+		if (!isNaN(legacyDolScreenWidth) && legacyDolScreenWidth > 0) {
+			return legacyDolScreenWidth;
+		}
+
+		const sessionDolScreenWidth = parseInt((typeof DOL_SCREENWIDTH_SESSION !== 'undefined') ? DOL_SCREENWIDTH_SESSION : '', 10);
+		if (!isNaN(sessionDolScreenWidth) && sessionDolScreenWidth > 0) {
+			return sessionDolScreenWidth;
+		}
+
+		return window.innerWidth;
+	})();
+	const toolbarRight = (currentDolScreenWidth < 500) ? 'timeGridDay,listWeek' : 'dayGridMonth,timeGridWeek,timeGridDay,listWeek';
 
 	var calendar = new FullCalendar.Calendar(calendarEl, {
 		initialView: isMobileView ? 'timeGridDay' : 'dayGridMonth',
