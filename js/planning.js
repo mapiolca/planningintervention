@@ -2,6 +2,11 @@
 
 document.addEventListener('DOMContentLoaded', function () {
 
+	if (typeof FullCalendar === 'undefined') {
+		console.error('PlanningIntervention: FullCalendar non chargé');
+		return;
+	}
+
 	let publicHolidays = [];
 	let rights = {};
 	let eventElements = new Map();
@@ -130,39 +135,51 @@ document.addEventListener('DOMContentLoaded', function () {
 		calendar.setOption('slotMaxTime', bounds.slotMaxTime);
 	}
 
+	calendar.render();
+
 	fetch('ajax/planning_options.php')
-		.then(res => res.json())
+		.then(res => {
+			if (!res.ok) {
+				throw new Error('HTTP ' + res.status);
+			}
+			return res.json();
+		})
 		.then(data => {
-			publicHolidays = data.publicHolidays;
-			hideWeekends = data.hideWeekends;
-			greyWeekends = data.greyWeekend;
-			dayViewShowCustomer = data.dayViewShowCustomer;
-			hideNonWorkingHours = data.hideNonWorkingHours;
+			publicHolidays = data.publicHolidays || [];
+			hideWeekends = data.hideWeekends ? 1 : 0;
+			greyWeekends = data.greyWeekend ? 1 : 0;
+			dayViewShowCustomer = data.dayViewShowCustomer ? 1 : 0;
+			hideNonWorkingHours = data.hideNonWorkingHours ? 1 : 0;
 			overrunDurationMinutes = parseInt(data.overrunDurationMinutes || 0, 10);
 			workTimesByDay = data.workTimesByDay || {};
-			rights = data.rights;
+			rights = data.rights || {};
 
 			calendar.setOption('weekends', !hideWeekends);
-			calendar.setOption('editable', rights.writePlanning);
+			calendar.setOption('editable', !!rights.writePlanning);
 			applyWorkingHoursVisibility(calendar.view);
-			calendar.render();
+		})
+		.catch(error => {
+			console.error('PlanningIntervention: erreur chargement options planning', error);
 		});
-
+	
 	const elements = document.querySelectorAll('.filter-multi');
 
-	elements.forEach((element) => {
-		new Choices(element, {
-			removeItemButton: true,
-			itemSelectText: '',
-			placeholder: true,
-			placeholderValue: element.dataset.label || 'Filtrer',
-			shouldSort: false,
+	if (typeof Choices !== 'undefined') {
+		elements.forEach((element) => {
+			new Choices(element, {
+				removeItemButton: true,
+				itemSelectText: '',
+				placeholder: true,
+				placeholderValue: element.dataset.label || 'Filtrer',
+				shouldSort: false,
+			});
 		});
-	});
+	} else {
+		console.warn('PlanningIntervention: Choices non chargé');
+	}
 
 	var calendarEl = document.getElementById('calendar');
-	const currentDolScreenWidth = (typeof dol_screenwidth !== 'undefined') ? parseInt(dol_screenwidth, 10) : window.innerWidth;
-	const toolbarRight = (currentDolScreenWidth < 500) ? 'timeGridDay,listWeek' : 'dayGridMonth,timeGridWeek,timeGridDay,listWeek';
+	const toolbarRight = isMobileView ? 'timeGridDay,listWeek' : 'dayGridMonth,timeGridWeek,timeGridDay,listWeek';
 
 	var calendar = new FullCalendar.Calendar(calendarEl, {
 		initialView: isMobileView ? 'timeGridDay' : 'dayGridMonth',
@@ -304,16 +321,18 @@ document.addEventListener('DOMContentLoaded', function () {
                         </div>` + html;
                     }
 
-                    tippy(eventEl, {
-                        content: html,
-                        allowHTML: true,
-                        theme: 'light',
-                        placement: 'auto',
-                        interactive: true,
-                        maxWidth: 300,
-						appendTo: () => document.body,
-						zIndex: 2147483647,
-                    });
+                    if (typeof tippy !== 'undefined') {
+						tippy(eventEl, {
+							content: html,
+							allowHTML: true,
+							theme: 'light',
+							placement: 'auto',
+							interactive: true,
+							maxWidth: 300,
+							appendTo: () => document.body,
+							zIndex: 2147483647,
+						});
+					}
                 });
 
 			if (info.view.type.startsWith('list') && eventEl.classList.contains('fc-list-event')) {
@@ -437,34 +456,40 @@ document.addEventListener('DOMContentLoaded', function () {
         };
     }
     
-    function showToast(message, type) {
-        let color = type === 'error' ? '#ef4444' : '#22c55e';
-        Toastify({
-            duration: 4000,
-            gravity: "top",
-            position: "right",
-            stopOnFocus: true,
-            close: true,
-            escapeMarkup: false,
-            text: `
+	function showToast(message, type) {
+		let color = type === 'error' ? '#ef4444' : '#22c55e';
+
+		if (typeof Toastify === 'undefined') {
+			console.warn('PlanningIntervention: Toastify non chargé - message:', message);
+			return;
+		}
+
+		Toastify({
+			duration: 4000,
+			gravity: "top",
+			position: "right",
+			stopOnFocus: true,
+			close: true,
+			escapeMarkup: false,
+			text: `
             <span style="display:flex; align-items:center; gap:10px;">
                 <i style="color:${color}" class="${type === 'error' ? 'fas fa-exclamation-triangle' : 'fas fa-check-circle'}"></i>
                 <span>${message}</span>
             </span>
         `,
-            style: {
-                background: "#1f2937",
-                borderRadius: "8px",
-                color: "#fff",
-                fontSize: "14px",
-                padding: "12px 16px",
-                boxShadow: "0 4px 12px rgba(0,0,0,0.3)",
-                borderBottom: `3px solid ${color}`,
-                display: "flex",
-                alignItems: "center",
-            },
-        }).showToast();
-    }
+			style: {
+				background: "#1f2937",
+				borderRadius: "8px",
+				color: "#fff",
+				fontSize: "14px",
+				padding: "12px 16px",
+				boxShadow: "0 4px 12px rgba(0,0,0,0.3)",
+				borderBottom: `3px solid ${color}`,
+				display: "flex",
+				alignItems: "center",
+			},
+		}).showToast();
+	}
 
     window.saveInterventionDate = function(id) {
         const input = document.getElementById('exp-date-input-' + id);
