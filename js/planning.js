@@ -61,6 +61,8 @@ document.addEventListener('DOMContentLoaded', function () {
 	});
 
 	var calendarEl = document.getElementById('calendar');
+	const currentDolScreenWidth = (typeof dol_screenwidth !== 'undefined') ? parseInt(dol_screenwidth, 10) : window.innerWidth;
+	const toolbarRight = (currentDolScreenWidth < 500) ? 'timeGridDay,listWeek' : 'dayGridMonth,timeGridWeek,timeGridDay,listWeek';
 
 	var calendar = new FullCalendar.Calendar(calendarEl, {
 		initialView: isMobileView ? 'timeGridDay' : 'dayGridMonth',
@@ -88,7 +90,7 @@ document.addEventListener('DOMContentLoaded', function () {
 		headerToolbar: {
 			left: 'prev,next today refresh',
 			center: 'title',
-			right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+			right: toolbarRight
 		},
 		buttonText: {
 			today: LANGS.today,
