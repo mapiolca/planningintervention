@@ -599,10 +599,10 @@ class modPlanningIntervention extends DolibarrModules
 					$ignoreHoursOptions, //$param
 					1, //$alwayseditable
 					'', //$perms
-					-1, //$list
+					'-1', //$list
 					$ignoreHoursFieldHelp, //$help
 					'', //$computed
-					0, //$entity
+					'0', //$entity
 					'planningintervention@planningintervention', //$langfile
 					'isModEnabled("planningintervention")', //$enabled
 					0, //$totalizable
