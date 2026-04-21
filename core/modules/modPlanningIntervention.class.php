@@ -600,7 +600,7 @@ class modPlanningIntervention extends DolibarrModules
 					'', //$computed
 					'', //$entity
 					'planningintervention@planningintervention', //$langfile
-					'iModEnabled("planningintervention")', //$enabled
+					'isModEnabled("planningintervention")', //$enabled
 					'', //$totalizable
 					'', //$printable
 					array(), //$moreparams
