@@ -23,7 +23,7 @@ $sqlRows = "SELECT inter.rowid, parent.ref, inter.date, parent.rowid as parentId
         WHERE inter.date IS NOT NULL
           ";
 
-$sqlParents = "SELECT parent.rowid, parent.ref, parent.description, parent.fk_statut as status, extra.date_prevue, s.nom as customer_name
+$sqlParents = "SELECT parent.rowid, parent.ref, parent.description, parent.fk_statut as status, extra.date_prevue, extra.date_fin_prevue, s.nom as customer_name
         FROM ".MAIN_DB_PREFIX."fichinter parent
         LEFT JOIN ".MAIN_DB_PREFIX."fichinter_extrafields extra ON extra.fk_object = parent.rowid
 		LEFT JOIN ".MAIN_DB_PREFIX."societe s ON s.rowid = parent.fk_soc
@@ -88,19 +88,31 @@ while ($obj = $db->fetch_object($resqlParents)) {
 	$color = $colorMap[$obj->status] ?? '#3788d8';
 	$datePrevue = (string) $obj->date_prevue;
 	$dateOnly = substr($datePrevue, 0, 10);
+	$dateFinPrevue = (string) $obj->date_fin_prevue;
 	$timePart = strlen($datePrevue) >= 19 ? substr($datePrevue, 11, 8) : '';
 	$hasPlannedTime = (!empty($timePart) && $timePart !== '00:00:00');
+	$hasPlannedEnd = !empty($dateFinPrevue) && $dateFinPrevue !== '0000-00-00 00:00:00';
 
 	if ($hasPlannedTime) {
 		$startTimestamp = strtotime(substr($datePrevue, 0, 19));
-		$endTimestamp = $startTimestamp ? ($startTimestamp + 3600) : false;
+		$endTimestamp = $hasPlannedEnd ? strtotime(substr($dateFinPrevue, 0, 19)) : false;
+		if (!$endTimestamp && $startTimestamp) {
+			$endTimestamp = $startTimestamp + 3600;
+		}
 
 		$eventStart = $startTimestamp ? date('Y-m-d\TH:i:s', $startTimestamp) : str_replace(' ', 'T', substr($datePrevue, 0, 19));
 		$eventEnd = $endTimestamp ? date('Y-m-d\TH:i:s', $endTimestamp) : date('Y-m-d\TH:i:s', strtotime('+1 hour', strtotime(substr($datePrevue, 0, 19))));
 		$eventAllDay = false;
 	} else {
 		$eventStart = $dateOnly;
-		$eventEnd = date('Y-m-d', strtotime('+1 day', strtotime($dateOnly)));
+		if ($hasPlannedEnd) {
+			$eventEnd = substr($dateFinPrevue, 0, 10);
+			if ($eventEnd <= $dateOnly) {
+				$eventEnd = date('Y-m-d', strtotime('+1 day', strtotime($dateOnly)));
+			}
+		} else {
+			$eventEnd = date('Y-m-d', strtotime('+1 day', strtotime($dateOnly)));
+		}
 		$eventAllDay = true;
 	}
 
