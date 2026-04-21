@@ -104,10 +104,12 @@ document.addEventListener('DOMContentLoaded', function () {
 				displayEventTime: false
 			},
 			timeGridWeek: {
-				allDaySlot: true
+				allDaySlot: true,
+				slotEventOverlap: false
 			},
 			timeGridDay: {
-				allDaySlot: true
+				allDaySlot: true,
+				slotEventOverlap: false
 			}
 		},
 		eventResizableFromStart: false,
