@@ -1,3 +1,5 @@
+/* Copyright (C) 2026		Pierre Ardoin				<developpeur@lesmetiersdubatiment.fr> */
+
 document.addEventListener('DOMContentLoaded', function () {
 
 	let publicHolidays = [];
@@ -6,6 +8,9 @@ document.addEventListener('DOMContentLoaded', function () {
 	let hideWeekends = 0;
 	let greyWeekends = 0;
 	let dayViewShowCustomer = false;
+	let hideNonWorkingHours = false;
+	let overrunDurationMinutes = 0;
+	let workTimesByDay = {};
 
 	const isMobileView = window.matchMedia('(max-width: 767px)').matches;
 
@@ -32,6 +37,97 @@ document.addEventListener('DOMContentLoaded', function () {
 		headerRow.appendChild(descriptionHeader);
 
 		headerRow.dataset.piColumnsReady = '1';
+
+		const totalColumns = headerRow.querySelectorAll('th').length;
+		if (totalColumns > 0) {
+			table.querySelectorAll('tbody tr.fc-list-day th, tbody tr.fc-list-day td, tbody tr.fc-list-empty td').forEach((cell) => {
+				cell.setAttribute('colspan', String(totalColumns));
+			});
+		}
+	}
+
+	function parseWorkRanges(rawRanges) {
+		const ranges = [];
+		String(rawRanges || '').split(',').forEach((slot) => {
+			const trimmedSlot = slot.trim();
+			if (!trimmedSlot) return;
+
+			const match = trimmedSlot.match(/^([0-9]{1,2})(?::([0-9]{2}))?\s*-\s*([0-9]{1,2})(?::([0-9]{2}))?$/);
+			if (!match) return;
+
+			const startHour = parseInt(match[1], 10);
+			const startMinute = match[2] ? parseInt(match[2], 10) : 0;
+			const endHour = parseInt(match[3], 10);
+			const endMinute = match[4] ? parseInt(match[4], 10) : 0;
+			const startTotal = (startHour * 60) + startMinute;
+			const endTotal = (endHour * 60) + endMinute;
+
+			if (startTotal >= 0 && startTotal < 1440 && endTotal > 0 && endTotal <= 1440 && startTotal < endTotal) {
+				ranges.push([startTotal, endTotal]);
+			}
+		});
+
+		return ranges;
+	}
+
+	function formatMinutesAsTime(minutes) {
+		const boundedMinutes = Math.max(0, Math.min(1440, minutes));
+		if (boundedMinutes === 1440) {
+			return '24:00:00';
+		}
+
+		const hours = Math.floor(boundedMinutes / 60);
+		const mins = boundedMinutes % 60;
+		return String(hours).padStart(2, '0') + ':' + String(mins).padStart(2, '0') + ':00';
+	}
+
+	function computeBoundsForDates(startDate, endDateExclusive) {
+		let minStart = null;
+		let maxEnd = null;
+		const iterDate = new Date(startDate.getTime());
+
+		while (iterDate < endDateExclusive) {
+			const dayRanges = parseWorkRanges(workTimesByDay[iterDate.getDay()]);
+			dayRanges.forEach((range) => {
+				if (minStart === null || range[0] < minStart) minStart = range[0];
+				if (maxEnd === null || range[1] > maxEnd) maxEnd = range[1];
+			});
+			iterDate.setDate(iterDate.getDate() + 1);
+		}
+
+		if (minStart === null || maxEnd === null) {
+			return { slotMinTime: '00:00:00', slotMaxTime: '24:00:00' };
+		}
+
+		const minWithOverrun = minStart - overrunDurationMinutes;
+		const maxWithOverrun = maxEnd + overrunDurationMinutes;
+		const boundedMin = Math.max(0, minWithOverrun);
+		const boundedMax = Math.min(1440, maxWithOverrun);
+
+		if (boundedMin >= boundedMax) {
+			return { slotMinTime: '00:00:00', slotMaxTime: '24:00:00' };
+		}
+
+		return {
+			slotMinTime: formatMinutesAsTime(boundedMin),
+			slotMaxTime: formatMinutesAsTime(boundedMax)
+		};
+	}
+
+	function applyWorkingHoursVisibility(view) {
+		if (!view || !view.type || !view.type.startsWith('timeGrid')) {
+			return;
+		}
+
+		if (!hideNonWorkingHours) {
+			calendar.setOption('slotMinTime', '00:00:00');
+			calendar.setOption('slotMaxTime', '24:00:00');
+			return;
+		}
+
+		const bounds = computeBoundsForDates(view.activeStart, view.activeEnd);
+		calendar.setOption('slotMinTime', bounds.slotMinTime);
+		calendar.setOption('slotMaxTime', bounds.slotMaxTime);
 	}
 
 	fetch('ajax/planning_options.php')
@@ -41,10 +137,14 @@ document.addEventListener('DOMContentLoaded', function () {
 			hideWeekends = data.hideWeekends;
 			greyWeekends = data.greyWeekend;
 			dayViewShowCustomer = data.dayViewShowCustomer;
+			hideNonWorkingHours = data.hideNonWorkingHours;
+			overrunDurationMinutes = parseInt(data.overrunDurationMinutes || 0, 10);
+			workTimesByDay = data.workTimesByDay || {};
 			rights = data.rights;
 
 			calendar.setOption('weekends', !hideWeekends);
 			calendar.setOption('editable', rights.writePlanning);
+			applyWorkingHoursVisibility(calendar.view);
 			calendar.render();
 		});
 
@@ -115,6 +215,9 @@ document.addEventListener('DOMContentLoaded', function () {
 		eventResizableFromStart: false,
 		eventDurationEditable: false,
 		locale: USER_LANG.split("_")[0],
+		datesSet: function (info) {
+			applyWorkingHoursVisibility(info.view);
+		},
 		events: function (fetchInfo, successCallback, failureCallback) {
 
 			let filters = getFilters();

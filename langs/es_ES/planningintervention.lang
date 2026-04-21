@@ -1,6 +1,7 @@
 # Translation file
 
 PLANNINGINTERVENTION_DAY_VIEW_SHOW_CUSTOMER = Vista diaria: mostrar el nombre del tercero en lugar de la referencia de intervención
+PLANNINGINTERVENTION_HIDE_NON_WORKING_HOURS = Ocultar horarios no laborables (Día/Semana)
 PLANNINGINTERVENTION_LIST_THIRD_PARTY = Tercero
 PLANNINGINTERVENTION_LIST_DESCRIPTION = Descripción
 NewSectionWorkSchedules = Horarios de intervención
@@ -12,6 +13,11 @@ PLANNINGINTERVENTION_WORKTIME_THU = Horarios del jueves (ejemplo: 8-12, 14-17)
 PLANNINGINTERVENTION_WORKTIME_FRI = Horarios del viernes (ejemplo: 8-12, 14-17)
 PLANNINGINTERVENTION_WORKTIME_SAT = Horarios del sábado (ejemplo: 8-12, 14-17)
 PLANNINGINTERVENTION_WORKTIME_SUN = Horarios del domingo (ejemplo: 8-12, 14-17)
+IgnoreOpeningHours = Ignorar horas de apertura
+PlannedStartDate = Fecha de inicio prevista
+PlannedStartDateHelp = Fecha de inicio prevista de la intervención
+PlannedEndDate = Fecha de fin prevista
+PlannedEndDateHelp = Fecha de fin prevista de la intervención
 PLANNINGINTERVENTION_IGNORE_OPENING_HOURS_HELP = Ignorar horas de apertura = intervención continua. Empezar antes del inicio = permite mostrar antes de apertura. Terminar después del cierre = permite mostrar después del cierre.
 PLANNINGINTERVENTION_IGNORE_OPENING_HOURS_1 = Ignorar horas de apertura
 PLANNINGINTERVENTION_IGNORE_OPENING_HOURS_2 = Empezar antes del inicio

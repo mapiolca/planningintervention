@@ -1,6 +1,7 @@
 <?php
 /* Copyright (C) 2004-2017  Laurent Destailleur     <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Frédéric France         <frederic.france@free.fr>
+ * Copyright (C) 2026		Pierre Ardoin				<developpeur@lesmetiersdubatiment.fr>
  * Copyright (C) 2026		ForLead 				<contact@forlead.fr>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -154,6 +155,9 @@ $formSetup->newItem('PLANNINGINTERVENTION_GREY_WEEKEND')->setAsYesNo();
 
 // Affichage du nom du tiers en vue Jour
 $formSetup->newItem('PLANNINGINTERVENTION_DAY_VIEW_SHOW_CUSTOMER')->setAsYesNo();
+
+// Masquer les horaires non travaillées en vues Jour/Semaine
+$formSetup->newItem('PLANNINGINTERVENTION_HIDE_NON_WORKING_HOURS')->setAsYesNo();
 
 // Section : Horaires d'intervention
 $formSetup->newItem('NewSectionWorkSchedules')->setAsTitle();

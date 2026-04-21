@@ -2,6 +2,7 @@
 /* Copyright (C) 2004-2018	Laurent Destailleur			<eldy@users.sourceforge.net>
  * Copyright (C) 2018-2019	Nicolas ZABOURI				<info@inovea-conseil.com>
  * Copyright (C) 2019-2024	Frédéric France				<frederic.france@free.fr>
+ * Copyright (C) 2026		Pierre Ardoin				<developpeur@lesmetiersdubatiment.fr>
  * Copyright (C) 2026		ForLead 					<contact@forlead.fr>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -76,7 +77,7 @@ class modPlanningIntervention extends DolibarrModules
 		$this->editor_squarred_logo = '';					// Must be image filename into the module/img directory followed with @modulename. Example: 'myimage.png@planningintervention'
 
 		// Possible values for version are: 'development', 'experimental', 'dolibarr', 'dolibarr_deprecated', 'experimental_deprecated' or a version string like 'x.y.z'
-		$this->version = '1.0.1';
+		$this->version = '1.1';
 		// Url to the file with your last numberversion of this module
 		//$this->url_last_version = 'http://www.example.com/versionmodule.txt';
 
@@ -87,7 +88,7 @@ class modPlanningIntervention extends DolibarrModules
 		// If file is in theme/yourtheme/img directory under name object_pictovalue.png, use this->picto='pictovalue'
 		// If file is in module/img directory under name object_pictovalue.png, use this->picto='pictovalue@module'
 		// To use a supported fa-xxx css style of font awesome, use this->picto='xxx'
-		$this->picto = 'LogoFL@planningof';
+		$this->picto = 'LogoFL@planningintervention';
 
 		// Define some features supported by module (triggers, login, substitutions, menus, css, etc...)
 		$this->module_parts = array(
@@ -510,66 +511,11 @@ class modPlanningIntervention extends DolibarrModules
 		global $db;
 
 		$sql = array();
-
+		
 		dol_include_once('/core/class/extrafields.class.php');
 		$extra = new ExtraFields($db);
 
 		$elementType = 'fichinter';
-		$plannedDateFields = array(
-			array(
-				'name' => 'date_prevue',
-				'label' => 'Date de début prévue',
-				'help' => 'Date de début prévue de l\'intervention',
-				'position' => 100,
-			),
-			array(
-				'name' => 'date_fin_prevue',
-				'label' => 'Date de fin prévue',
-				'help' => 'Date de fin prévue de l\'intervention',
-				'position' => 110,
-			),
-		);
-
-		foreach ($plannedDateFields as $fieldMeta) {
-			$fieldName = $fieldMeta['name'];
-
-			// create extrafield if not exists
-			$resql = $db->query("SELECT rowid FROM ".MAIN_DB_PREFIX."extrafields WHERE elementtype='".$db->escape($elementType)."' AND name='".$db->escape($fieldName)."'");
-			if ($resql && $db->num_rows($resql) == 0) {
-				$result = $extra->addExtraField(
-					$fieldName,
-					$fieldMeta['label'],
-					'datetime',
-					$fieldMeta['position'],
-					'',
-					$elementType,
-					0,
-					0,
-					'',
-					'',
-					1,
-					'',
-					3,
-					$fieldMeta['help']
-				);
-
-				if ($result <= 0) {
-					return -1;
-				}
-			}
-
-			// ensure label/help are up to date and field enabled
-			$db->query("UPDATE ".MAIN_DB_PREFIX."extrafields
-				SET label = '".$db->escape($fieldMeta['label'])."',
-					help = '".$db->escape($fieldMeta['help'])."',
-					enabled = 1
-				WHERE elementtype = '".$db->escape($elementType)."'
-				AND name = '".$db->escape($fieldName)."'");
-		}
-
-		$ignoreHoursFieldName = 'ignore_opening_hours';
-		$ignoreHoursFieldLabel = 'IgnoreOpeningHours';
-		$ignoreHoursFieldHelp = 'PLANNINGINTERVENTION_IGNORE_OPENING_HOURS_HELP';
 		$ignoreHoursOptions = array(
 			'options' => array(
 				'1' => 'PLANNINGINTERVENTION_IGNORE_OPENING_HOURS_1',
@@ -577,50 +523,113 @@ class modPlanningIntervention extends DolibarrModules
 				'3' => 'PLANNINGINTERVENTION_IGNORE_OPENING_HOURS_3',
 			),
 		);
+		$plannedDateFields = array(
+			array(
+				'name' => 'date_prevue',
+				'label' => 'PlannedStartDate',
+				'type' => 'datetime',
+				'position' => 100,
+				'elementtype' => $elementType,
+				'unique' => 0,
+				'required' => 0,
+				'default_value' => '',
+				'param' => '',
+				'alwayseditable' => 1,
+				'perms' => '',
+				'list' => '3',
+				'help' => 'PlannedStartDateHelp',
+				'computed' => '',
+				'entity' => '',
+				'langfile' => 'planningintervention@planningintervention',
+				'enabled' => 'isModEnabled("planningintervention")',
+				'totalizable' => '',
+				'printable' => '',
+				'moreparam' => array(),
+				'airprompt' => '',
+				'emptyonclone' => 0,
+				'showintooltip' => 0,
+			),
+			array(
+				'name' => 'date_fin_prevue',
+				'label' => 'PlannedEndDate',
+				'type' => 'datetime',
+				'position' => 110,
+				'elementtype' => $elementType,
+				'unique' => 0,
+				'required' => 0,
+				'default_value' => '',
+				'param' => '',
+				'alwayseditable' => 1,
+				'perms' => '',
+				'list' => '3',
+				'help' => 'PlannedEndDateHelp',
+				'computed' => '',
+				'entity' => '',
+				'langfile' => 'planningintervention@planningintervention',
+				'enabled' => 'isModEnabled("planningintervention")',
+				'totalizable' => '',
+				'printable' => '',
+				'moreparam' => array(),
+				'airprompt' => '',
+				'emptyonclone' => 0,
+				'showintooltip' => 0,
+			),
+			array(
+				'name' => 'ignore_opening_hours',
+				'label' => 'IgnoreOpeningHours',
+				'type' => 'select',
+				'position' => 120,
+				'size' => '',
+				'elementtype' => $elementType,
+				'unique' => 0,
+				'required' => 0,
+				'default_value' => '',
+				'param' => $ignoreHoursOptions, 
+				'alwayseditable' => 1,
+				'perms' => '',
+				'list' => '-1',
+				'help' => 'PLANNINGINTERVENTION_IGNORE_OPENING_HOURS_HELP',
+				'computed' => '',
+				'entity' => '',
+				'langfile' => 'planningintervention@planningintervention',
+				'enabled' => 'isModEnabled("planningintervention")',
+				'totalizable' => '',
+				'printable' => '',
+				'moreparam' => array(),
+				'airprompt' => '',
+				'emptyonclone' => 0,
+				'showintooltip' => 0,
+			),
+		);
 
-		$resql = $db->query("SELECT rowid FROM ".MAIN_DB_PREFIX."extrafields WHERE elementtype='".$db->escape($elementType)."' AND name='".$db->escape($ignoreHoursFieldName)."'");
-
-		if ($resql && $db->num_rows($resql) == 0) {
-				$result = $extra->addExtraField(
-					$ignoreHoursFieldName, //$attrname
-					$ignoreHoursFieldLabel, //$label
-					'select', //$type
-					120, //$pos
-					'', //$size
-					$elementType, //$elementtype
-					0, //$unique
-					0, //$required
-					'', //$default_value
-					$ignoreHoursOptions, //$param
-					1, //$alwayseditable
-					'', //$perms
-					'-1', //$list
-					$ignoreHoursFieldHelp, //$help
-					'', //$computed
-					'', //$entity
-					'planningintervention@planningintervention', //$langfile
-					'iModEnabled("planningintervention")', //$enabled
-					'', //$totalizable
-					'', //$printable
-					array(), //$moreparams
-					'', //$aiprompt
-					0, //$emptyonclone
-					0, //showintooltip
-				);
-			if ($result <= 0) {
-				return -1;
-			}
+		foreach ($plannedDateFields as $fieldMeta) {
+			$fieldName = $fieldMeta['name'];
+			$result = $extra->addExtraField(
+				$fieldName,
+				$fieldMeta['label'],
+				$fieldMeta['type'],
+				$fieldMeta['position'],
+				$fieldMeta['size'],
+				$fieldMeta['elementtype'],
+				$fieldMeta['unique'],
+				$fieldMeta['required'],
+				$fieldMeta['default_value'],
+				$fieldMeta['param'],
+				$fieldMeta['alwayseditable'],
+				$fieldMeta['perms'],
+				$fieldMeta['list'],
+				$fieldMeta['help'],
+				$fieldMeta['computed'],
+				$fieldMeta['entity'],
+				$fieldMeta['langfile'],
+				$fieldMeta['enabled'],
+				$fieldMeta['totalizable'],
+				$fieldMeta['printable'],
+				$fieldMeta['airprompt'],
+				$fieldMeta['emptyonclone'],
+				$fieldMeta['showintooltip'],
+			);
 		}
-
-			$db->query("UPDATE ".MAIN_DB_PREFIX."extrafields
-				SET label = '".$db->escape($ignoreHoursFieldLabel)."',
-					help = '".$db->escape($ignoreHoursFieldHelp)."',
-					value = '',
-					param = '".$db->escape(json_encode($ignoreHoursOptions))."',
-					enabled = 1
-				WHERE elementtype = '".$db->escape($elementType)."'
-				AND name = '".$db->escape($ignoreHoursFieldName)."'");
-
 		return $this->_init($sql, $options);
 	}
 
