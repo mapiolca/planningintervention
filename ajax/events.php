@@ -108,20 +108,21 @@ $sqlParents = "SELECT parent.rowid, parent.ref, parent.description, parent.fk_st
 
 // ── Statuts ──
 $statusToInclude = [];
+$plannedStatuses = array(0, 1);
 $treatedStatuses = array(2, 3);
 if ($statusStr !== '' && $statusStr !== null) {
     foreach (explode(',', $statusStr) as $p) {
         if (is_numeric($p)) $statusToInclude[] = intval($p);
     }
 } else {
-    $statusToInclude = [0, 1];
+    $statusToInclude = $plannedStatuses;
 }
 if ($showTreated) {
-	$statusToInclude = array_unique(array_merge($statusToInclude, $treatedStatuses));
+	$statusToInclude = array_unique(array_merge($statusToInclude, $plannedStatuses, $treatedStatuses));
 } else {
 	$statusToInclude = array_values(array_diff($statusToInclude, $treatedStatuses));
 	if (empty($statusToInclude)) {
-		$statusToInclude = [0, 1];
+		$statusToInclude = $plannedStatuses;
 	}
 }
 $sqlRows .= " AND parent.fk_statut IN (".implode(',', $statusToInclude).")";
