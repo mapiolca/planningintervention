@@ -146,9 +146,9 @@ $holidayColor = getDolGlobalString('PLANNINGINTERVENTION_COLOR_HOLIDAY', '#eca76
          
         
 
-        <div class="filter-toggles" title="Afficher les interventions traitées">
-            <label class="toggle-pill">
-                <input type="checkbox" id="filterShowTreated">
+		<div class="filter-toggles" title="Afficher les interventions traitées">
+			<label class="toggle-pill">
+				<input type="checkbox" id="filterShowTreated" checked="checked">
                 <span class="toggle-track">
                     <span class="toggle-thumb"></span>
                 </span>
