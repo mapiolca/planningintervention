@@ -30,33 +30,6 @@ if (!$user->rights->planningintervention->read && !$user->rights->planninginterv
     accessforbidden();
 }
 
-$interventionActionCodes = array();
-$sqlActionCodes = "SELECT code FROM ".MAIN_DB_PREFIX."c_actioncomm WHERE active = 1 AND element = 'fichinter'";
-$resqlActionCodes = $db->query($sqlActionCodes);
-if ($resqlActionCodes) {
-	while ($objActionCode = $db->fetch_object($resqlActionCodes)) {
-		if (!empty($objActionCode->code)) {
-			$interventionActionCodes[] = (string) $objActionCode->code;
-		}
-	}
-}
-if (empty($interventionActionCodes)) {
-	$interventionActionCodes = array('AC_FICHINTER');
-}
-
-$_REQUEST['disabledefaultvalues'] = 1;
-$_GET['disabledefaultvalues'] = 1;
-$_POST['disabledefaultvalues'] = 1;
-$_REQUEST['search_actioncode'] = $interventionActionCodes;
-$_GET['search_actioncode'] = $interventionActionCodes;
-$_POST['search_actioncode'] = $interventionActionCodes;
-$_REQUEST['mode'] = GETPOST('mode', 'aZ09') ? GETPOST('mode', 'aZ09') : 'show_month';
-$_GET['mode'] = $_REQUEST['mode'];
-$_POST['mode'] = $_REQUEST['mode'];
-
-require DOL_DOCUMENT_ROOT.'/comm/action/index.php';
-exit;
-
 print '<link rel="stylesheet" href="'.DOL_URL_ROOT.'/custom/planningintervention/css/planning.css">';
 
 //  customers
