@@ -20,24 +20,26 @@ document.addEventListener('DOMContentLoaded', function () {
 		if (!table) return;
 
 		const headerRow = table.querySelector('thead tr');
-		if (!headerRow || headerRow.dataset.piColumnsReady === '1') return;
+		if (!headerRow) return;
 
-		const titleHeader = headerRow.querySelector('.fc-list-event-title');
-		if (titleHeader) {
-			titleHeader.textContent = LANGS.intervention;
+		if (headerRow.dataset.piColumnsReady !== '1') {
+			const titleHeader = headerRow.querySelector('.fc-list-event-title');
+			if (titleHeader) {
+				titleHeader.textContent = LANGS.intervention;
+			}
+
+			const thirdPartyHeader = document.createElement('th');
+			thirdPartyHeader.className = 'fc-list-event-thirdparty';
+			thirdPartyHeader.textContent = LANGS.listThirdParty;
+			headerRow.appendChild(thirdPartyHeader);
+
+			const descriptionHeader = document.createElement('th');
+			descriptionHeader.className = 'fc-list-event-description';
+			descriptionHeader.textContent = LANGS.listDescription;
+			headerRow.appendChild(descriptionHeader);
+
+			headerRow.dataset.piColumnsReady = '1';
 		}
-
-		const thirdPartyHeader = document.createElement('th');
-		thirdPartyHeader.className = 'fc-list-event-thirdparty';
-		thirdPartyHeader.textContent = LANGS.listThirdParty;
-		headerRow.appendChild(thirdPartyHeader);
-
-		const descriptionHeader = document.createElement('th');
-		descriptionHeader.className = 'fc-list-event-description';
-		descriptionHeader.textContent = LANGS.listDescription;
-		headerRow.appendChild(descriptionHeader);
-
-		headerRow.dataset.piColumnsReady = '1';
 
 		const listColspan = 12;
 		table.querySelectorAll('th').forEach((cell) => {
@@ -246,6 +248,9 @@ document.addEventListener('DOMContentLoaded', function () {
 		datesSet: function (info) {
 			monthViewRenderedKeys.clear();
 			applyWorkingHoursVisibility(info.view);
+			if (info.view.type.startsWith('list')) {
+				setTimeout(() => ensureListColumnsHeader(), 0);
+			}
 		},
 		events: function (fetchInfo, successCallback, failureCallback) {
 
