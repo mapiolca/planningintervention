@@ -604,12 +604,6 @@ class modPlanningIntervention extends DolibarrModules
 					'', //$entity
 					'', //$langfile
 					'', //$enabled
-					0, //$totalizable
-					0, //$printable
-					'', //$moreparams
-					'', //$aiprompt
-					0, //$emptyonclone
-					0 //$showintooltip
 					);
 			if ($result <= 0) {
 				return -1;
