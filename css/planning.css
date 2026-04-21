@@ -123,7 +123,7 @@ body {
     border-radius: 12px;
     font-family: var(--font-family);
     padding: 5px;
-    z-index: 9999!important;
+    z-index: 2147483647!important;
 }
 
 .tippy-content {

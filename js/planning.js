@@ -209,6 +209,8 @@ document.addEventListener('DOMContentLoaded', function () {
                         placement: 'auto',
                         interactive: true,
                         maxWidth: 300,
+						appendTo: () => document.body,
+						zIndex: 2147483647,
                     });
                 });
 
