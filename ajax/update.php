@@ -19,10 +19,11 @@ if (!$user->rights->planningintervention->write || !$user->rights->ficheinter->c
 
 $id    = GETPOST('id', 'int');
 $start = GETPOST('start', 'alpha');
+$end = GETPOST('end', 'alpha');
 $type = GETPOST('type', 'alpha');
 
 
-$sql = "SELECT date_prevue FROM ".MAIN_DB_PREFIX."fichinter_extrafields WHERE fk_object = ".((int)$id);
+$sql = "SELECT date_prevue, date_fin_prevue FROM ".MAIN_DB_PREFIX."fichinter_extrafields WHERE fk_object = ".((int)$id);
 
 
 
@@ -52,7 +53,30 @@ $new_ts = mktime(
     date('Y', $new_date_ts)
 );
 
-$sql = "UPDATE ".MAIN_DB_PREFIX."fichinter_extrafields SET date_prevue = '".$db->idate($new_ts)."' WHERE fk_object = ".((int)$id);
+$new_end_ts = null;
+if (!empty($end)) {
+	$new_end_date_ts = strtotime($end);
+	if ($new_end_date_ts) {
+		$new_end_ts = mktime(
+			date('H', $new_end_date_ts),
+			date('i', $new_end_date_ts),
+			date('s', $new_end_date_ts),
+			date('m', $new_end_date_ts),
+			date('d', $new_end_date_ts),
+			date('Y', $new_end_date_ts)
+		);
+	}
+}
+
+if ($new_end_ts) {
+	$sql = "UPDATE ".MAIN_DB_PREFIX."fichinter_extrafields
+		SET date_prevue = '".$db->idate($new_ts)."', date_fin_prevue = '".$db->idate($new_end_ts)."'
+		WHERE fk_object = ".((int)$id);
+} else {
+	$sql = "UPDATE ".MAIN_DB_PREFIX."fichinter_extrafields
+		SET date_prevue = '".$db->idate($new_ts)."'
+		WHERE fk_object = ".((int)$id);
+}
 
 $resql = $db->query($sql);
 

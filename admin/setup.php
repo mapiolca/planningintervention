@@ -152,6 +152,19 @@ $formSetup->newItem('PLANNINGINTERVENTION_HIDE_WEEKENDS')->setAsYesNo();
 // Griser les weekends
 $formSetup->newItem('PLANNINGINTERVENTION_GREY_WEEKEND')->setAsYesNo();
 
+// Affichage du nom du tiers en vue Jour
+$formSetup->newItem('PLANNINGINTERVENTION_DAY_VIEW_SHOW_CUSTOMER')->setAsYesNo();
+
+// Section : Horaires d'intervention
+$formSetup->newItem('NewSectionWorkSchedules')->setAsTitle();
+$formSetup->newItem('PLANNINGINTERVENTION_WORKTIME_MON');
+$formSetup->newItem('PLANNINGINTERVENTION_WORKTIME_TUE');
+$formSetup->newItem('PLANNINGINTERVENTION_WORKTIME_WED');
+$formSetup->newItem('PLANNINGINTERVENTION_WORKTIME_THU');
+$formSetup->newItem('PLANNINGINTERVENTION_WORKTIME_FRI');
+$formSetup->newItem('PLANNINGINTERVENTION_WORKTIME_SAT');
+$formSetup->newItem('PLANNINGINTERVENTION_WORKTIME_SUN');
+
 
 
 //$item = $formSetup->newItem('PLANNINGINTERVENTION_MYPARAM13')->setAsDate();	// Not yet implemented

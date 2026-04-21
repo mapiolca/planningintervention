@@ -1,0 +1,13 @@
+# Translation file
+
+PLANNINGINTERVENTION_DAY_VIEW_SHOW_CUSTOMER = Tagesansicht: Firmenname statt Interventionsreferenz anzeigen
+PLANNINGINTERVENTION_LIST_THIRD_PARTY = Drittpartei
+PLANNINGINTERVENTION_LIST_DESCRIPTION = Beschreibung
+NewSectionWorkSchedules = Einsatzzeiten
+PLANNINGINTERVENTION_WORKTIME_MON = Montag Arbeitszeiten (Beispiel: 8-12, 14-17)
+PLANNINGINTERVENTION_WORKTIME_TUE = Dienstag Arbeitszeiten (Beispiel: 8-12, 14-17)
+PLANNINGINTERVENTION_WORKTIME_WED = Mittwoch Arbeitszeiten (Beispiel: 8-12, 14-17)
+PLANNINGINTERVENTION_WORKTIME_THU = Donnerstag Arbeitszeiten (Beispiel: 8-12, 14-17)
+PLANNINGINTERVENTION_WORKTIME_FRI = Freitag Arbeitszeiten (Beispiel: 8-12, 14-17)
+PLANNINGINTERVENTION_WORKTIME_SAT = Samstag Arbeitszeiten (Beispiel: 8-12, 14-17)
+PLANNINGINTERVENTION_WORKTIME_SUN = Sonntag Arbeitszeiten (Beispiel: 8-12, 14-17)
