@@ -40,6 +40,9 @@ document.addEventListener('DOMContentLoaded', function () {
 		headerRow.dataset.piColumnsReady = '1';
 
 		const listColspan = 12;
+		table.querySelectorAll('th').forEach((cell) => {
+			cell.setAttribute('colspan', String(listColspan));
+		});
 		table.querySelectorAll('tbody tr.fc-list-day th, tbody tr.fc-list-day td, tbody tr.fc-list-empty td').forEach((cell) => {
 			cell.setAttribute('colspan', String(listColspan));
 		});
