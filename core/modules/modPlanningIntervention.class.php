@@ -574,34 +574,35 @@ class modPlanningIntervention extends DolibarrModules
 
 		$resql = $db->query("SELECT rowid FROM ".MAIN_DB_PREFIX."extrafields WHERE elementtype='".$db->escape($elementType)."' AND name='".$db->escape($ignoreHoursFieldName)."'");
 		if ($resql && $db->num_rows($resql) == 0) {
-			$result = $extra->addExtraField(
-				$ignoreHoursFieldName,
-				$ignoreHoursFieldLabel,
-				'select',
-				120,
-				'',
-				$elementType,
-				0,
-				0,
-				'',
-				$ignoreHoursOptions,
-				1,
-				'',
-				3,
-				$ignoreHoursFieldHelp
+				$result = $extra->addExtraField(
+					$ignoreHoursFieldName,
+					$ignoreHoursFieldLabel,
+					'select',
+					120,
+					'',
+					$elementType,
+					0,
+					0,
+					$ignoreHoursOptions,
+					'',
+					1,
+					'',
+					3,
+					$ignoreHoursFieldHelp
 			);
 			if ($result <= 0) {
 				return -1;
 			}
 		}
 
-		$db->query("UPDATE ".MAIN_DB_PREFIX."extrafields
-			SET label = '".$db->escape($ignoreHoursFieldLabel)."',
-				help = '".$db->escape($ignoreHoursFieldHelp)."',
-				param = '".$db->escape($ignoreHoursOptions)."',
-				enabled = 1
-			WHERE elementtype = '".$db->escape($elementType)."'
-			AND name = '".$db->escape($ignoreHoursFieldName)."'");
+			$db->query("UPDATE ".MAIN_DB_PREFIX."extrafields
+				SET label = '".$db->escape($ignoreHoursFieldLabel)."',
+					help = '".$db->escape($ignoreHoursFieldHelp)."',
+					value = '".$db->escape($ignoreHoursOptions)."',
+					param = '',
+					enabled = 1
+				WHERE elementtype = '".$db->escape($elementType)."'
+				AND name = '".$db->escape($ignoreHoursFieldName)."'");
 
 		return $this->_init($sql, $options);
 	}
