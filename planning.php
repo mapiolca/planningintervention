@@ -30,7 +30,7 @@ if (!$user->rights->planningintervention->read && !$user->rights->planninginterv
     accessforbidden();
 }
 
-print '<link rel="stylesheet" href="'.DOL_URL_ROOT.'/custom/planningintervention/css/planning.css">';
+print '<link rel="stylesheet" href="'.dol_buildpath('/planningintervention/css/planning.css', 1).'">';
 
 //  customers
 $sqlClients = "SELECT s.rowid, s.nom FROM ".MAIN_DB_PREFIX."societe s 
@@ -73,12 +73,13 @@ $holidayColor = getDolGlobalString('PLANNINGINTERVENTION_COLOR_HOLIDAY', '#eca76
 <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
 <title>Planning des Interventions</title>
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+
 <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/dist/tippy.css" />
 <script src="https://unpkg.com/@popperjs/core@2"></script>
 <script src="https://unpkg.com/tippy.js@6"></script>
-<link rel="stylesheet" href="node_modules/toastify-js/src/toastify.css">
-<script src="node_modules/toastify-js/src/toastify.js"></script>
 
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
 <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
@@ -163,7 +164,7 @@ $holidayColor = getDolGlobalString('PLANNINGINTERVENTION_COLOR_HOLIDAY', '#eca76
 
 </div>
 
-<script src="js/planning.js"></script>
+<script src="<?php echo dol_buildpath('/planningintervention/js/planning.js', 1); ?>"></script>
 
 <?php
 llxFooter();
