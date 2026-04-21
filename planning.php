@@ -118,7 +118,7 @@ $holidayColor = getDolGlobalString('PLANNINGINTERVENTION_COLOR_HOLIDAY', '#eca76
             <select id="filterStatus" class="filter-multi" data-label="<?php echo $langs->trans("Status"); ?>" multiple name="status[]">
                 <option value="0"><?php echo $langs->trans("Draft"); ?></option>
                 <option value="1"><?php echo $langs->trans("Validated"); ?></option>
-                <option value="3"><?php echo $langs->trans("Done"); ?></option>
+                <option value="2"><?php echo $langs->trans("Done"); ?></option>
             </select>
         </div>
 
