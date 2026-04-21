@@ -1,0 +1,58 @@
+# Translation file
+
+#
+# Generic
+#
+
+# Module label 'ModulePlanningInterventionName'
+ModulePlanningInterventionName = Planning Intervention
+# Module description 'ModulePlanningInterventionDesc'
+ModulePlanningInterventionDesc = Afficher les Interventions dans un planning interactif
+
+#
+# Admin page
+#
+PlanningInterventionSetup = PlanningIntervention setup
+Settings = Settings
+PlanningInterventionSetupPage = Paramétrage Planning Intervention
+NewSection=New section
+PLANNINGINTERVENTION_MYPARAM1 = My param 1
+PLANNINGINTERVENTION_MYPARAM1Tooltip = My param 1 tooltip
+PLANNINGINTERVENTION_MYPARAM2=My param 2
+PLANNINGINTERVENTION_MYPARAM2Tooltip=My param 2 tooltip
+
+
+#
+# About page
+#
+About = About
+PlanningInterventionAbout = À propos du Planning Intervention
+PlanningInterventionAboutPage = PlanningIntervention about page
+
+#
+# Sample page
+#
+PlanningInterventionArea = Home PlanningIntervention
+MyPageName = My page name
+
+#
+# Sample widget
+#
+MyWidget = My widget
+MyWidgetDescription = My widget description
+
+
+NewSectionColors = Couleurs des plages
+PLANNINGINTERVENTION_COLOR_DRAFT = Statut brouillon
+PLANNINGINTERVENTION_COLOR_VALIDATED = Statut validé 
+PLANNINGINTERVENTION_COLOR_FINISHED = Statut effectué 
+
+PLANNINGINTERVENTION_HOLIDAY_COUNTRY = Pays pour les jours fériés
+NewSectionHolidays = Jours fériés & congés
+PLANNINGINTERVENTION_GREY_WEEKEND = Griser les weekends (Sam/Dim)
+PLANNINGINTERVENTION_HIDE_WEEKENDS = Masquer les weekends (Sam/Dim)
+NewSectionCalendar = Affichage du calendrier
+
+
+PLANNING_INTERVENTION =  Planning Intervention
+INTERVENTION_CARD_TITLE = Fiche Intervention

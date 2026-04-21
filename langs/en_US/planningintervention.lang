@@ -1,0 +1,57 @@
+# Translation file
+
+#
+# Generic
+#
+
+# Module label 'ModulePlanningInterventionName'
+ModulePlanningInterventionName = Intervention Planning
+# Module description 'ModulePlanningInterventionDesc'
+ModulePlanningInterventionDesc = Show Interventions in interactive planning.
+
+#
+# Admin page
+#
+PlanningInterventionSetup = PlanningIntervention setup
+Settings = Settings
+PlanningInterventionSetupPage = Intervention Planning Parameter
+NewSection=New section
+PLANNINGINTERVENTION_MYPARAM1 = My param 1
+PLANNINGINTERVENTION_MYPARAM1Tooltip = My param 1 tooltip
+PLANNINGINTERVENTION_MYPARAM2=My param 2
+PLANNINGINTERVENTION_MYPARAM2Tooltip=My param 2 tooltip
+
+
+#
+# About page
+#
+About = About
+PlanningInterventionAbout = About Intervention Planning
+PlanningInterventionAboutPage = PlanningIntervention about page
+
+#
+# Sample page
+#
+PlanningInterventionArea = Home PlanningIntervention
+MyPageName = My page name
+
+#
+# Sample widget
+#
+MyWidget = My widget
+MyWidgetDescription = My widget description
+
+
+NewSectionColors = Events colos
+PLANNINGINTERVENTION_COLOR_DRAFT = Draft color
+PLANNINGINTERVENTION_COLOR_VALIDATED = Validated color 
+PLANNINGINTERVENTION_COLOR_FINISHED = Done color 
+
+PLANNINGINTERVENTION_HOLIDAY_COUNTRY = Country for public holidays
+NewSectionHolidays = Public holidays & Leaves
+PLANNINGINTERVENTION_GREY_WEEKEND = Gray weekends
+PLANNINGINTERVENTION_HIDE_WEEKENDS = Hide weekends
+NewSectionCalendar = Calendar Display
+
+PLANNING_INTERVENTION = Intervention Planning
+INTERVENTION_CARD_TITLE = Intervention Card
