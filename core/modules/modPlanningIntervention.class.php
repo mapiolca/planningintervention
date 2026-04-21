@@ -585,7 +585,8 @@ class modPlanningIntervention extends DolibarrModules
 			$columnExists = true;
 		}
 		if ($resql && $db->num_rows($resql) == 0 && !$columnExists) {
-				$result = $extra->addExtraField(
+				$result0 = $extra->addExtraField('alopiscine_myattr4', "New Attr 4 label", 'select',  1,  3, 'thirdparty',   0, 1, '', array('options'=>array('code1'=>'Val1','code2'=>'Val2','code3'=>'Val3')), 1,'', -1, 0, '', '', 'alopiscine@alopiscine', 'isModEnabled("alopiscine")');
+				$result1 = $extra->addExtraField(
 					$ignoreHoursFieldName, //$attrname
 					$ignoreHoursFieldLabel, //$label
 					'select', //$type
