@@ -51,7 +51,19 @@ PLANNINGINTERVENTION_HOLIDAY_COUNTRY = Pays pour les jours fériés
 NewSectionHolidays = Jours fériés & congés
 PLANNINGINTERVENTION_GREY_WEEKEND = Griser les weekends (Sam/Dim)
 PLANNINGINTERVENTION_HIDE_WEEKENDS = Masquer les weekends (Sam/Dim)
+PLANNINGINTERVENTION_DAY_VIEW_SHOW_CUSTOMER = Vue Jour : afficher le nom du tiers à la place de la référence
+PLANNINGINTERVENTION_LIST_THIRD_PARTY = Tiers
+PLANNINGINTERVENTION_LIST_DESCRIPTION = Description
 NewSectionCalendar = Affichage du calendrier
+NewSectionWorkSchedules = Horaires d'intervention
+PLANNINGINTERVENTION_OVERRUN_DURATION = Durée de dépassement (HH:mm)
+PLANNINGINTERVENTION_WORKTIME_MON = Horaires du lundi (exemple : 8-12, 14-17)
+PLANNINGINTERVENTION_WORKTIME_TUE = Horaires du mardi (exemple : 8-12, 14-17)
+PLANNINGINTERVENTION_WORKTIME_WED = Horaires du mercredi (exemple : 8-12, 14-17)
+PLANNINGINTERVENTION_WORKTIME_THU = Horaires du jeudi (exemple : 8-12, 14-17)
+PLANNINGINTERVENTION_WORKTIME_FRI = Horaires du vendredi (exemple : 8-12, 14-17)
+PLANNINGINTERVENTION_WORKTIME_SAT = Horaires du samedi (exemple : 8-12, 14-17)
+PLANNINGINTERVENTION_WORKTIME_SUN = Horaires du dimanche (exemple : 8-12, 14-17)
 
 
 PLANNING_INTERVENTION =  Planning Intervention

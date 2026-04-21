@@ -1,0 +1,14 @@
+# Translation file
+
+PLANNINGINTERVENTION_DAY_VIEW_SHOW_CUSTOMER = Vista diaria: mostrar el nombre del tercero en lugar de la referencia de intervención
+PLANNINGINTERVENTION_LIST_THIRD_PARTY = Tercero
+PLANNINGINTERVENTION_LIST_DESCRIPTION = Descripción
+NewSectionWorkSchedules = Horarios de intervención
+PLANNINGINTERVENTION_OVERRUN_DURATION = Duración de sobrepaso (HH:mm)
+PLANNINGINTERVENTION_WORKTIME_MON = Horarios del lunes (ejemplo: 8-12, 14-17)
+PLANNINGINTERVENTION_WORKTIME_TUE = Horarios del martes (ejemplo: 8-12, 14-17)
+PLANNINGINTERVENTION_WORKTIME_WED = Horarios del miércoles (ejemplo: 8-12, 14-17)
+PLANNINGINTERVENTION_WORKTIME_THU = Horarios del jueves (ejemplo: 8-12, 14-17)
+PLANNINGINTERVENTION_WORKTIME_FRI = Horarios del viernes (ejemplo: 8-12, 14-17)
+PLANNINGINTERVENTION_WORKTIME_SAT = Horarios del sábado (ejemplo: 8-12, 14-17)
+PLANNINGINTERVENTION_WORKTIME_SUN = Horarios del domingo (ejemplo: 8-12, 14-17)
